@@ -27,17 +27,26 @@ set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
 set(ELF_PATH "${CMAKE_BINARY_DIR}/${target}")
-set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/ls.ld")
+
+# linker script is a adapted copy of CMSIS_5/Device/ARM/ARMCM7/Source/GCC/gcc_arm.ld
+set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/ld.ld")
 set(CPU "cortex-m3")
 set(target "${PROJECT_NAME}.elf")
 set(QEMU_MACHINE "lm3s6965evb")
 
 set(C_SOURCES
+	# CMSIS_5/Device/ARM/ARMCM7/Source/GCC/startup_ARMCM7.S
+	CMSIS_5/Device/ARM/ARMCM7/Source/startup_ARMCM7.c
+	CMSIS_5/Device/ARM/ARMCM7/Source/system_ARMCM7.c
+	
 	src/main.c
     src/os/os_app_hooks.c
 )
 
 set(C_INCLUDES
+	CMSIS_5/Device/ARM/ARMCM7/Include
+	CMSIS_5/CMSIS/Core/Include
+
     src
     src/os
 )
@@ -70,6 +79,8 @@ set(UCOS3_SOURCES_KERNEL
 	uC-OS3/Source/os_time.c
 	uC-OS3/Source/os_tmr.c
 	uC-OS3/Source/os_var.c
+
+	uC-CPU/cpu_core.c
 )
 
 file(GLOB UCOS3_SOURCES_LIB uC-LIB/*.c)
@@ -85,6 +96,7 @@ set(UCOS3_INCLUDES
 
 set(UC_DEFINES
 	"-DCPU_CFG_NVIC_PRIO_BITS=4"
+	"-DARMCM7"
 )
 
 add_executable(${target} ${C_SOURCES} ${UCOS3_SOURCES_ARCH} ${UCOS3_SOURCES_KERNEL} ${UCOS3_SOURCES_LIB})
@@ -133,14 +145,6 @@ add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${OBJCOPY} -O binary -S ${target} ${PROJECT_NAME}.bin)
 
 # disassembly
-# add_custom_command(TARGET ${target} POST_BUILD
-# 	COMMAND ${OBJDUMP} -S ${output_name} > ${target}.dis.src.asm VERBATIM
-# 	DEPENDS ${target}
-# )   
-# add_custom_command(TARGET ${target} POST_BUILD
-# 	COMMAND ${READELF} -a ${output_name} > ${target}.readelf.txt VERBATIM
-# 	DEPENDS ${target}
-# )
 add_custom_command(TARGET ${target} POST_BUILD
     COMMAND ${OBJDUMP} -S ${target} > objdump_src.s VERBATIM
 	COMMAND ${OBJDUMP} -d ${target} > objdump.s VERBATIM
