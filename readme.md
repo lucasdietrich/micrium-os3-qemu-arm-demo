@@ -4,6 +4,7 @@ Use another target to run the OS:
 - `netduinoplus2`: https://github.com/qemu/qemu/blob/079b1252e9de384385c9da910262312ec2e574c8/include/hw/arm/stm32f405_soc.h
   - More SRAM (192kB)
   - More uarts
+- Add MPS2 AN386 board for emulated Cortex-M4 test coverage: https://github.com/zephyrproject-rtos/zephyr/issues/45319
 
 - [weston-embedded / uC-OS3](https://github.com/weston-embedded/uC-OS3)
 - [µC documentation Spaces](https://micrium.atlassian.net/wiki/spaces)
