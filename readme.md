@@ -22,8 +22,8 @@ Using `qemu-system-arm` machine `lm3s6965evb` Stellaris LM3S6965EVB (Cortex-M3).
 - TCP/IP official stack bugs
 - Porting code to QEMU (IAR or GCC) ? Custom section in code/linker script ?
 
-## Questions/issues
-- Why codespace is at address 0x00000000?
+## Questions/issues/notes
+- Codespace starts at 0x00000000
 - I think sysclock didn't started
 
 ## Emulate on QEMU
