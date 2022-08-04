@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <os.h>
-#include <lib_mem.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 #include <ARMCM7.h>
 
-#include <stdint.h>
-#include <stdbool.h>
+#include <os.h>
+#include <lib_mem.h>
 
 #define OS_TICKS_PER_SEC OS_CFG_TICK_RATE_HZ
 

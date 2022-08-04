@@ -7,7 +7,9 @@
         "cpu.h": "c",
         "stdint.h": "c",
         "core_cm7.h": "c",
-        "armcm7.h": "c"
+        "armcm7.h": "c",
+        "lib_mem.h": "c",
+        "stdbool.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true
 }

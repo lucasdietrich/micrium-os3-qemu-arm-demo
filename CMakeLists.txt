@@ -95,7 +95,7 @@ set(UCOS3_INCLUDES
 	uC-LIB
 )
 
-set(UC_DEFINES
+set(ARCH_DEFINES
 	"-DCPU_CFG_NVIC_PRIO_BITS=4"
 	"-DARMCM7"
 	"-DFCPU=12000000ul"
@@ -115,7 +115,7 @@ target_compile_options(${target} PRIVATE
 	-Wall
 )
 
-target_compile_definitions(${target} PRIVATE ${UC_DEFINES})
+target_compile_definitions(${target} PRIVATE ${ARCH_DEFINES})
 
 target_link_options(${target} PRIVATE
 	-mcpu=${CPU}
