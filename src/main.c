@@ -15,7 +15,10 @@ static CPU_STK task_stack2[0x100];
 
 void task(void *p_arg)
 {
-	OS_CPU_SysTickInitFreq(12000000lu);
+	/* Configure systick once */
+	if ((SysTick->CTRL & SysTick_CTRL_TICKINT_Msk) == 0u) {
+		OS_CPU_SysTickInitFreq(FCPU);
+	}
 
 	OS_ERR uce;
 	while (1u) {

@@ -12,7 +12,12 @@ Using `qemu-system-arm` machine `lm3s6965evb` Stellaris LM3S6965EVB (Cortex-M3).
 - Armv7-M
 
 - `OS_CPU_SysTickHandler` (uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/os_cpu_c.c) must be placed on entry 15 of the Cortex-M vector table.
-- 
+- `OS_CPU_PendSVHandler` must be placed on entry 14 of the Cortex-M vector table.
+- `FCPU` Internal oscillator frequency (Hz) is 12MHz.
+  - Value can be found in datasheet and in file zephyr/dts/arm/ti/lm3s6965.dtsi from zephyr project tree.
+
+- This file is also interesting:
+  - zephyr/boards/arm/qemu_cortex_m3/qemu_cortex_m3.dts
 
 ## Ideas for testing
 - SRAM/ROM size for networking
