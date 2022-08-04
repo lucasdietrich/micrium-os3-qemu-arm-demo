@@ -6,7 +6,8 @@
         "os.h": "c",
         "cpu.h": "c",
         "stdint.h": "c",
-        "core_cm7.h": "c"
+        "core_cm7.h": "c",
+        "armcm7.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true
 }

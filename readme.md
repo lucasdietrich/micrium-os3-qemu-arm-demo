@@ -1,7 +1,5 @@
 # Micrium OS 3 running in QEMU
 
-Author: Lucas Dietrich <ld.adecy@gmail.com>
-
 - [weston-embedded / uC-OS3](https://github.com/weston-embedded/uC-OS3)
 - [µC documentation Spaces](https://micrium.atlassian.net/wiki/spaces)
   - [µC/OS-III Documentation](https://micrium.atlassian.net/wiki/spaces/osiiidoc/overview?homepageId=132386)
@@ -27,6 +25,17 @@ Using `qemu-system-arm` machine `lm3s6965evb` Stellaris LM3S6965EVB (Cortex-M3).
 ## Questions/issues
 - Why codespace is at address 0x00000000?
 - I think sysclock didn't started
+
+## Emulate on QEMU
+
+Simply build and run `make qemu` then `F5`.
+
+Or this is the typical command to run QEMU:
+```
+qemu-system-arm -cpu cortex-m3 -machine lm3s6965evb -semihosting -s -S -nographic -device loader,file=build/ucos3-qemu-app.elf
+# -S for stop on startup
+# -s flag for debug on port 1234
+```
 
 ## Versions
 

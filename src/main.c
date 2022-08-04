@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2022 Lucas Dietrich <ld.adecy@gmail.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include <os.h>
 #include <lib_mem.h>
 
@@ -22,7 +28,7 @@ void task(void *p_arg)
 
 	OS_ERR uce;
 	while (1u) {
-		OSTimeDly(5 * OS_TICKS_PER_SEC, OS_OPT_TIME_DLY, &uce);
+		OSTimeDly(5u * OS_TICKS_PER_SEC, OS_OPT_TIME_DLY, &uce);
 	}
 }
 

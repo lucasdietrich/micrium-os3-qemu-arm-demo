@@ -159,6 +159,6 @@ add_custom_command(TARGET ${target} POST_BUILD
 
 # generate custom target for debug in qemu
 add_custom_target(qemu
-	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -bios ${target} -s -S -nographic -singlestep
+	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -semihosting -s -S -nographic -device loader,file=${target}
 	DEPENDS ${target}
 )
