@@ -1,4 +1,4 @@
-# Micrium OS 3 running in QEMU
+# Micrium OS 3 demo for QEMU (Cortex M3)
 
 - [weston-embedded / uC-OS3](https://github.com/weston-embedded/uC-OS3)
 - [µC documentation Spaces](https://micrium.atlassian.net/wiki/spaces)
