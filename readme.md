@@ -11,6 +11,9 @@ Using `qemu-system-arm` machine `lm3s6965evb` Stellaris LM3S6965EVB (Cortex-M3).
 
 - Armv7-M
 
+- `OS_CPU_SysTickHandler` (uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/os_cpu_c.c) must be placed on entry 15 of the Cortex-M vector table.
+- 
+
 ## Ideas for testing
 - SRAM/ROM size for networking
 - TCP/IP official stack bugs

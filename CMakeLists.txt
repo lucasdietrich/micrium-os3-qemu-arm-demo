@@ -36,9 +36,10 @@ set(QEMU_MACHINE "lm3s6965evb")
 
 set(C_SOURCES
 	# CMSIS_5/Device/ARM/ARMCM7/Source/GCC/startup_ARMCM7.S
-	CMSIS_5/Device/ARM/ARMCM7/Source/startup_ARMCM7.c
+	# CMSIS_5/Device/ARM/ARMCM7/Source/startup_ARMCM7.c
 	CMSIS_5/Device/ARM/ARMCM7/Source/system_ARMCM7.c
 	
+	src/startup_ARMCM7.c
 	src/main.c
     src/os/os_app_hooks.c
 )
