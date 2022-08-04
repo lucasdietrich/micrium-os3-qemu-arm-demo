@@ -1,3 +1,5 @@
+**TODO: Moved to another target: netduinoplus2 Cortex M4 or MPS2 AN386 Cortex M33**
+
 # Micrium OS 3 demo for QEMU (Cortex M3)
 
 Use another target to run the OS: 
