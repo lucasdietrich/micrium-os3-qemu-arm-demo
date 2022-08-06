@@ -22,6 +22,9 @@ Page 81 of RM0090 Rev 19:
 ## Todo
 - Link in Core Couple Memory RAM (CCM RAM)
 
+## Notes
+- NVIC Priority Grouping might be initialized twice (not sure somewhere in ucos3 and HAL_Init())
+
 ---
 
 # Micrium OS 3 demo for QEMU (Cortex M3)

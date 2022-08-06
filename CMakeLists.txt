@@ -42,7 +42,7 @@ set(C_SOURCES
 	src/sys/system_stm32f4xx.c
 
     src/os/os_app_hooks.c
-	src/main.c
+	src/entry.c
 )
 
 file(GLOB C_APP_SOURCES src/app/*.c)
