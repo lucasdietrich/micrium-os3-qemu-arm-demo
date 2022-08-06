@@ -62,8 +62,8 @@ set(C_INCLUDES
 	src/os
 
 	# Application headers
-    src
 	src/app
+    src
 )
 
 set(UCOS3_SOURCES_ARCH

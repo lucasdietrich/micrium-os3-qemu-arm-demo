@@ -14,7 +14,8 @@
         "core_cm4.h": "c",
         "stm32f4xx_hal_uart.h": "c",
         "stm32f4xx_hal_usart.h": "c",
-        "stm32f4xx_hal.h": "c"
+        "stm32f4xx_hal.h": "c",
+        "osal.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true
 }

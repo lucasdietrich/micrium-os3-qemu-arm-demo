@@ -6,10 +6,10 @@ cmake:
 make:
 	make -C build --no-print-directory
 
-qemu: 
+qemu: make
 	make -C build qemu --no-print-directory
 
-run: 
+run: make
 	make -C build run --no-print-directory
 
 clean:

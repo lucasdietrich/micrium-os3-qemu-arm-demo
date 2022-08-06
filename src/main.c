@@ -17,7 +17,7 @@
 
 #define OS_TICKS_PER_SEC OS_CFG_TICK_RATE_HZ
 
-#define SYS_MAIN_TASK_STACK_SIZE 	0x1000
+#define SYS_MAIN_TASK_STACK_SIZE 	0x400
 #define SYS_MAIN_TASK_PRIORITY 		0
 
 static OS_TCB  sys_main_thread;
@@ -39,7 +39,7 @@ void sys_task(void *p_arg)
 	}
 }
 
-#define MISC_TASK_COUNT 	0u
+#define MISC_TASK_COUNT 	2u
 #define MISC_TASK_STACK_SIZE 	0x100u
 #define MISC_TASK_PRIORITY	12u
 #define MISC_TASK_DELAY_SEC	5u
