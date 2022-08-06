@@ -26,27 +26,28 @@ enable_language(C ASM)
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
+set(CMAKE_C_FLAGS_DEBUG "-gdwarf-4 -g3")
+
+
 set(ELF_PATH "${CMAKE_BINARY_DIR}/${target}")
 
-# linker script is a adapted copy of CMSIS_5/Device/ARM/ARMCM7/Source/GCC/gcc_arm.ld
-set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/ld.ld")
-set(CPU "cortex-m3")
+# linker script copied from STM32CubeMX generated project
+set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/STM32F405RGTx_FLASH.ld")
+set(CPU "cortex-m4")
 set(target "${PROJECT_NAME}.elf")
-set(QEMU_MACHINE "lm3s6965evb")
+set(QEMU_MACHINE "netduinoplus2")
 
 set(C_SOURCES
-	# CMSIS_5/Device/ARM/ARMCM7/Source/GCC/startup_ARMCM7.S
-	# CMSIS_5/Device/ARM/ARMCM7/Source/startup_ARMCM7.c
-	CMSIS_5/Device/ARM/ARMCM7/Source/system_ARMCM7.c
-	
-	src/startup_ARMCM7.c
+	src/startup_stm32f405xx.s
+	src/system_stm32f4xx.c
+
 	src/main.c
     src/os/os_app_hooks.c
 )
 
 set(C_INCLUDES
-	CMSIS_5/Device/ARM/ARMCM7/Include
-	CMSIS_5/CMSIS/Core/Include
+	STM32CubeF4/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+	STM32CubeF4/Drivers/CMSIS/Include
 
     src
     src/os
@@ -64,6 +65,7 @@ set(UCOS3_SOURCES_ARCH
 
 set(UCOS3_SOURCES_KERNEL
 	# uC-OS3/Source/__dbg_uCOS-III.c
+
 	uC-OS3/Source/os_cfg_app.c
 	uC-OS3/Source/os_core.c
 	uC-OS3/Source/os_dbg.c
@@ -97,8 +99,9 @@ set(UCOS3_INCLUDES
 
 set(ARCH_DEFINES
 	"-DCPU_CFG_NVIC_PRIO_BITS=4"
-	"-DARMCM7"
-	"-DFCPU=12000000ul"
+	"-DARMCM7_SP"
+	"-DSTM32F405xx"
+	"-DFCPU=16000000ul"
 )
 
 add_executable(${target} ${C_SOURCES} ${UCOS3_SOURCES_ARCH} ${UCOS3_SOURCES_KERNEL} ${UCOS3_SOURCES_LIB})

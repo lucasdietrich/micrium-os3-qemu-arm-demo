@@ -9,7 +9,9 @@
         "core_cm7.h": "c",
         "armcm7.h": "c",
         "lib_mem.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "stm32f405xx.h": "c",
+        "core_cm4.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true
 }
