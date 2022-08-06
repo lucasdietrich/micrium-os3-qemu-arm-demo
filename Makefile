@@ -9,5 +9,8 @@ make:
 qemu: 
 	make -C build qemu --no-print-directory
 
+run: 
+	make -C build run --no-print-directory
+
 clean:
 	rm -rf build

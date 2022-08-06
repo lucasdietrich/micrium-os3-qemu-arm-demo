@@ -8,7 +8,7 @@
             "miDebuggerServerAddress": "127.0.0.1:1234",
             "program": "build/ucos3-qemu-app.elf",
             "args": [],
-            "stopAtEntry": true,
+            "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,

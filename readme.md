@@ -19,6 +19,9 @@
 Page 81 of RM0090 Rev 19:
 > After reset, the CPU clock frequency is 16 MHz and 0 wait state (WS) is configured in the FLASH_ACR register.
 
+## Todo
+- Link in Core Couple Memory RAM (CCM RAM)
+
 ---
 
 # Micrium OS 3 demo for QEMU (Cortex M3)
