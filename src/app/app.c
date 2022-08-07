@@ -12,12 +12,14 @@
 #include <stm32f4xx_hal.h>
 #include <stm32f4xx_hal_uart.h>
 
-#define CONSOLE_UART1_DEVICE USART1
-#define CONSOLE_UART2_DEVICE USART2
-#define CONSOLE_UART3_DEVICE USART3
-#define CONSOLE_UART4_DEVICE UART4
-#define CONSOLE_UART5_DEVICE UART5
-#define CONSOLE_UART6_DEVICE USART6
+#define UART1_DEVICE USART1
+#define UART2_DEVICE USART2
+#define UART3_DEVICE USART3
+#define UART4_DEVICE UART4
+#define UART5_DEVICE UART5
+#define UART6_DEVICE USART6
+
+#define UART_INIT(_device) { .Instance = _device }
 
 static void Error_Handler(void);
 
@@ -28,22 +30,26 @@ static void Error_Handler(void);
 // 	return ch;
 // }
 
-static HAL_StatusTypeDef app_uart_init(UART_HandleTypeDef *huart,
-				       USART_TypeDef *device)
+static HAL_StatusTypeDef app_uart_init(UART_HandleTypeDef *huart)
 {
-	/* Initialize UART */
-	huart->Instance = device;
+	HAL_StatusTypeDef ret = HAL_ERROR;
 
-	huart->Init.BaudRate     = 115200u;
-	huart->Init.WordLength   = UART_WORDLENGTH_8B;
-	huart->Init.StopBits     = UART_STOPBITS_1;
-	huart->Init.Parity       = UART_PARITY_NONE;
-	huart->Init.HwFlowCtl    = UART_HWCONTROL_NONE;
-	huart->Init.Mode         = UART_MODE_TX_RX;
+	if (huart->Instance == NULL) {
+		goto error;
+	}
+
+	/* Initialize UART */
+	huart->Init.BaudRate = 115200u;
+	huart->Init.WordLength = UART_WORDLENGTH_8B;
+	huart->Init.StopBits = UART_STOPBITS_1;
+	huart->Init.Parity = UART_PARITY_NONE;
+	huart->Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	huart->Init.Mode = UART_MODE_TX_RX;
 	huart->Init.OverSampling = UART_OVERSAMPLING_16;
 
-	HAL_StatusTypeDef ret = HAL_UART_Init(huart);
+	ret = HAL_UART_Init(huart);
 
+error:
 	if (ret != HAL_OK) {
 		Error_Handler();
 	}
@@ -62,18 +68,23 @@ static HAL_StatusTypeDef app_uart_send(UART_HandleTypeDef *huart,
 	return ret;
 }
 
-static UART_HandleTypeDef huart[6u];
+static UART_HandleTypeDef huart[6u] = {
+	UART_INIT(UART1_DEVICE),
+	UART_INIT(UART2_DEVICE),
+	UART_INIT(UART3_DEVICE),
+	UART_INIT(UART4_DEVICE),
+	UART_INIT(UART5_DEVICE),
+	UART_INIT(UART6_DEVICE)
+};
 
 void app_init(void)
 {
 	HAL_Init();
 
-	app_uart_init(&huart[0u], CONSOLE_UART1_DEVICE);
-	app_uart_init(&huart[1u], CONSOLE_UART2_DEVICE);
-	app_uart_init(&huart[2u], CONSOLE_UART3_DEVICE);
-	app_uart_init(&huart[3u], CONSOLE_UART4_DEVICE);
-	app_uart_init(&huart[4u], CONSOLE_UART5_DEVICE);
-	app_uart_init(&huart[5u], CONSOLE_UART6_DEVICE);
+	for (uint8_t i = 0; i < 6u; i++)
+	{
+		app_uart_init(&huart[i]);
+	}
 }
 
 static const char message[] = "%lu - uart %p - Hello from QEMU ARM stm32f405 running Micrium OS 3 !\n";
