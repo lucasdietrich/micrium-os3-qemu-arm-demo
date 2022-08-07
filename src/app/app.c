@@ -81,8 +81,7 @@ void app_init(void)
 {
 	HAL_Init();
 
-	for (uint8_t i = 0; i < 6u; i++)
-	{
+	for (uint8_t i = 0; i < 6u; i++) {
 		app_uart_init(&huart[i]);
 	}
 }
