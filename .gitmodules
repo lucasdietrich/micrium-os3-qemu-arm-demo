@@ -10,3 +10,9 @@
 [submodule "STM32CubeF4"]
 	path = STM32CubeF4
 	url = https://github.com/STMicroelectronics/STM32CubeF4.git
+[submodule "uC-TCP-IP"]
+	path = uC-TCP-IP
+	url = https://github.com/weston-embedded/uC-TCP-IP.git
+[submodule "uC-Common"]
+	path = uC-Common
+	url = https://github.com/weston-embedded/uC-Common.git

@@ -1,4 +1,4 @@
-**TODO: Moved to another target: netduinoplus2 Cortex M4 or MPS2 AN386 Cortex M33**
+**TODO currently on this error: Line 657 of `uC-TCP-IP/IF/net_if_ether.c`**
 
 # QEMU
 
@@ -14,6 +14,8 @@
 - [µC documentation Spaces](https://micrium.atlassian.net/wiki/spaces)
   - [µC/OS-III Documentation](https://micrium.atlassian.net/wiki/spaces/osiiidoc/overview?homepageId=132386)
 - [CMSIS-Core (Cortex-M)](https://arm-software.github.io/CMSIS_5/Core/html/index.html)
+- [TCP/IP stack doc](https://micrium.atlassian.net/wiki/spaces/TCPIPDOC/pages/565482/Wired+Ethernet+Interface+Setup#WiredEthernetInterfaceSetup-Figure-%C2%B5C/TCP-IPSourceCode)
+  - uC-TCP-IP/Examples/Init/init_ether.c
 
 # Micrium OS 3 demo for QEMU (Cortex M4)
 
@@ -34,7 +36,9 @@ Page 81 of RM0090 Rev 19:
 ## Todo
 - Link in Core Couple Memory RAM (CCM RAM) : `__attribute__((section(".ccmram")))` does not work yet.
 - NVIC Priority Grouping might be initialized twice (not sure somewhere in ucos3 and HAL_Init())
-- 
+- Optimized value of `LIB_MEM_CFG_HEAP_SIZE`
+
+
 ## Notes
 - `qemu-system-arm -accel help` > `tcg`
 - `qemu-system-arm -device help`
@@ -59,6 +63,8 @@ Page 81 of RM0090 Rev 19:
   - memory
 - No clock tree support in QEMU:
   - https://stackoverflow.com/questions/56853507/timer-supply-to-cpu-in-qemu
+- Tuning heap alloc size: `LIB_MEM_CFG_HEAP_SIZE`
+  - Move `CPU_INT08U   Mem_Heap[LIB_MEM_CFG_HEAP_SIZE];` to CCM
 
 
 ---

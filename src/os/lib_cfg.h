@@ -107,7 +107,7 @@
                                                                 /* Heap memory size (in bytes).                         */
                                                                 /* Configure the desired size of the heap memory. ...   */
                                                                 /* ... Set to 0 to disable heap allocation features.    */
-#define  LIB_MEM_CFG_HEAP_SIZE                  1024u
+#define  LIB_MEM_CFG_HEAP_SIZE                  (32768u + 16384u)
 
 
                                                                 /* Heap memory padding alignment (in bytes).            */

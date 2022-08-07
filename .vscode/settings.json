@@ -15,7 +15,10 @@
         "stm32f4xx_hal_uart.h": "c",
         "stm32f4xx_hal_usart.h": "c",
         "stm32f4xx_hal.h": "c",
-        "osal.h": "c"
+        "osal.h": "c",
+        "net_ascii.h": "c",
+        "net_ipv4.h": "c",
+        "os_app_hooks.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true
 }

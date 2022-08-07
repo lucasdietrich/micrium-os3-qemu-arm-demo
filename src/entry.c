@@ -14,6 +14,7 @@
 #include <lib_mem.h>
 
 #include <app.h>
+#include <app_net.h>
 
 #define OS_TICKS_PER_SEC OS_CFG_TICK_RATE_HZ
 
@@ -29,6 +30,9 @@ void sys_task(void *p_arg)
 	if ((SysTick->CTRL & SysTick_CTRL_TICKINT_Msk) == 0u) {
 		OS_CPU_SysTickInitFreq(FCPU);
 	}
+
+	/* Networking stack must be initialized after OS has beenstarted */
+	app_net_init();
 
 	app_init();
 

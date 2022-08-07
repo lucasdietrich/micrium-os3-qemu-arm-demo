@@ -42,6 +42,8 @@ set(C_SOURCES
 	src/sys/system_stm32f4xx.c
 
     src/os/os_app_hooks.c
+	src/os/net_cfg.c
+	src/os/net_dev_cfg.c
 	src/entry.c
 )
 
@@ -76,6 +78,8 @@ set(UCOS3_SOURCES_ARCH
 	# uC-LIB/Ports/ARM-Cortex-M3/GNU/lib_mem_a.s
 )
 
+set(UCOS3_SOURCES_KAL "uC-Common/KAL/uCOS-III/kal.c")
+
 set(UCOS3_SOURCES_KERNEL
 	# uC-OS3/Source/__dbg_uCOS-III.c
 
@@ -98,6 +102,13 @@ set(UCOS3_SOURCES_KERNEL
 
 	uC-CPU/cpu_core.c
 )
+
+file(GLOB UCOS3_SOURCES_TCPIP_BASE uC-TCP-IP/Source/*.c)
+file(GLOB UCOS3_SOURCES_TCPIP_IPV4 uC-TCP-IP/IP/IPv4/*.c)
+file(GLOB UCOS3_SOURCES_TCPIP_IPV6 uC-TCP-IP/IP/IPv6/*.c)
+file(GLOB UCOS3_SOURCES_TCPIP_IF uC-TCP-IP/IF/*.c)
+set(UCOS3_SOURCES_TCPIP ${UCOS3_SOURCES_TCPIP_BASE} ${UCOS3_SOURCES_TCPIP_IPV4} ${UCOS3_SOURCES_TCPIP_IPV6} ${UCOS3_SOURCES_TCPIP_IF})
+
 
 set(STM32_HAL_DRIVERS_SOURCES
 	# STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c
@@ -203,10 +214,13 @@ file(GLOB UCOS3_SOURCES_LIB uC-LIB/*.c)
 set(UCOS3_INCLUDES
     uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/GNU
     uC-OS3/Source
+	uC-OS3
 
 	uC-CPU/ARM-Cortex-M/ARMv7-M/GNU
 	uC-CPU
 	uC-LIB
+	uC-TCP-IP
+	uC-Common
 )
 
 set(ARCH_DEFINES
@@ -216,7 +230,7 @@ set(ARCH_DEFINES
 	"-DFCPU=16000000ul"
 )
 
-add_executable(${target} ${C_SOURCES} ${C_APP_SOURCES} ${UCOS3_SOURCES_ARCH} ${UCOS3_SOURCES_KERNEL} ${UCOS3_SOURCES_LIB} ${STM32_HAL_DRIVERS_SOURCES})
+add_executable(${target} ${C_SOURCES} ${C_APP_SOURCES} ${UCOS3_SOURCES_ARCH} ${UCOS3_SOURCES_KERNEL} ${UCOS3_SOURCES_LIB} ${STM32_HAL_DRIVERS_SOURCES} ${UCOS3_SOURCES_TCPIP} ${UCOS3_SOURCES_KAL})
 
 target_include_directories(${target} PRIVATE ${C_INCLUDES} ${UCOS3_INCLUDES})
 
@@ -261,16 +275,18 @@ add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${OBJCOPY} -O ihex ${target} ${PROJECT_NAME}.hex
         COMMAND ${OBJCOPY} -O binary -S ${target} ${PROJECT_NAME}.bin)
 
-# disassembly
-add_custom_command(TARGET ${target} POST_BUILD
-    COMMAND ${OBJDUMP} -S ${target} > objdump_src.s VERBATIM
-	COMMAND ${OBJDUMP} -d ${target} > objdump.s VERBATIM
-    COMMAND ${OBJDUMP} -D ${target} > objdump_all.s VERBATIM
-    COMMAND ${OBJDUMP} -h ${target} > objdump_sections.s VERBATIM
-    COMMAND ${READELF} -a ${target} > readelf.txt VERBATIM
-    COMMAND ${NM} --print-size --size-sort --radix=x ${target} > nm.txt VERBATIM
-	DEPENDS ${target}
-)
+if(DEFINED DO_DISASSEMBLY AND DO_DISASSEMBLY STREQUAL 1) 
+	# disassembly
+	add_custom_command(TARGET ${target} POST_BUILD
+		COMMAND ${OBJDUMP} -S ${target} > objdump_src.s VERBATIM
+		COMMAND ${OBJDUMP} -d ${target} > objdump.s VERBATIM
+		COMMAND ${OBJDUMP} -D ${target} > objdump_all.s VERBATIM
+		COMMAND ${OBJDUMP} -h ${target} > objdump_sections.s VERBATIM
+		COMMAND ${READELF} -a ${target} > readelf.txt VERBATIM
+		COMMAND ${NM} --print-size --size-sort --radix=x ${target} > nm.txt VERBATIM
+		DEPENDS ${target}
+	)
+endif()
 
 # generate custom target to debug in qemu
 add_custom_target(qemu
