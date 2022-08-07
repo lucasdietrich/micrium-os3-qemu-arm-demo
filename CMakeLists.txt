@@ -274,12 +274,22 @@ add_custom_command(TARGET ${target} POST_BUILD
 
 # generate custom target to debug in qemu
 add_custom_target(qemu
-	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -semihosting -s -S -nographic -device loader,file=${target}
-	DEPENDS ${target}
+	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -nodefaults -nographic -semihosting -icount shift=0,align=off,sleep=on -rtc clock=vm -vga none -nographic -device loader,file=${target} -pidfile qemu.pid -chardev stdio,id=myCon,mux=on -mon chardev=myCon,mode=readline -serial chardev:myCon -serial chardev:myCon -chardev file,id=myFile,mux=on,path=io.txt -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile -s -S 
 )
 
 # generate custom command to run only in qemu
 add_custom_target(run
-	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -semihosting -nographic -device loader,file=${target}
-	DEPENDS ${target}
+	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -nodefaults -nographic -semihosting -icount shift=0,align=off,sleep=on -rtc clock=vm -vga none -nographic -device loader,file=${target} -pidfile qemu.pid -chardev stdio,id=myCon,mux=on -mon chardev=myCon,mode=readline -serial chardev:myCon -serial chardev:myCon -chardev file,id=myFile,mux=on,path=io.txt -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile
+
 )
+
+# Two followin configuration are equivalent
+# -nodefaults -chardev stdio,id=myCon,mux=on -serial chardev:myCon
+# -nodefaults -chardev stdio,id=con,mux=on -serial chardev:con
+
+
+# -chardev file,id=mon,path=/home/lucas/ucos3-qemu-app/io.txt -serial mon:stdio
+
+# Check these options 
+# -kernel ${target}
+# -nodefaults 
