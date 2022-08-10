@@ -1,7 +1,10 @@
+BOARD="lm3s6965evb"
+BOARD="netduinoplus2"
+
 all: cmake make
 
 cmake:
-	cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain-arm-none-eabi.cmake -DCMAKE_BUILD_TYPE=Debug -DDO_DISASSEMBLY=1 -S . -B build
+	cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain-arm-none-eabi.cmake -DCMAKE_BUILD_TYPE=Debug -DDO_DISASSEMBLY=1 -DBOARD=$(BOARD) -S . -B build
 
 make:
 	make -C build --no-print-directory

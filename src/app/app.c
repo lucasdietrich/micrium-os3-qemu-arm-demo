@@ -8,6 +8,8 @@
 
 #include <osal.h>
 
+#if defined(NETDUINOPLUS2)
+
 #include <stm32f405xx.h>
 #include <stm32f4xx_hal.h>
 #include <stm32f4xx_hal_uart.h>
@@ -20,8 +22,6 @@
 #define UART6_DEVICE USART6
 
 #define UART_INIT(_device) { .Instance = _device }
-
-static void Error_Handler(void);
 
 // int fputc(int ch, FILE *f)
 // {
@@ -109,11 +109,19 @@ error:
 	__builtin_unreachable();
 }
 
-static void Error_Handler(void)
-{
-	__disable_irq();
+#endif
 
+#if defined(LM3S6965EVB)
+
+void app_init(void)
+{
+
+}
+
+void app_task(void *p_arg)
+{
 	for (;;) {
-		
+		k_sleep(K_MSEC(1000u));
 	}
 }
+#endif

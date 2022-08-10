@@ -8,10 +8,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include <stm32f405xx.h>
-
 #include <os.h>
 #include <lib_mem.h>
+
+#include <board.h>
 
 #include <app.h>
 #include <app_net.h>

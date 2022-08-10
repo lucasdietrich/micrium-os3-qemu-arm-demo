@@ -18,7 +18,8 @@
         "osal.h": "c",
         "net_ascii.h": "c",
         "net_ipv4.h": "c",
-        "os_app_hooks.h": "c"
+        "os_app_hooks.h": "c",
+        "board.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true
 }

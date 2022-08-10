@@ -16,3 +16,6 @@
 [submodule "uC-Common"]
 	path = uC-Common
 	url = https://github.com/weston-embedded/uC-Common.git
+[submodule "CMSIS_5"]
+	path = CMSIS_5
+	url = https://github.com/ARM-software/CMSIS_5.git

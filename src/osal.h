@@ -1,6 +1,8 @@
 #ifndef _OSAL_H_
 #define _OSAL_H_
 
+#include <board.h>
+
 /* OS Abstraction Layer */
 
 #include <stdint.h>
@@ -30,6 +32,15 @@ static inline  void k_sched_unlock(void)
 {
 	OS_ERR uce;
 	OSSchedUnlock(&uce);
+}
+
+static inline void Error_Handler(void)
+{
+	__disable_irq();
+
+	for (;;) {
+
+	}
 }
 
 #endif // _OSAL_H_
