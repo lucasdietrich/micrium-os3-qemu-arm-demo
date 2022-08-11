@@ -6,6 +6,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include <bsp.h>
 #include <board.h>
 
 #include <osal.h>
@@ -117,12 +118,17 @@ error:
 
 void app_init(void)
 {
-
+	serial_init(&stellaris_uart0);
 }
 
 void app_task(void *p_arg)
 {
+	unsigned char c;
 	for (;;) {
+		if (serial_poll_in(&stellaris_uart0, &c) == 0) {
+			serial_poll_out(&stellaris_uart0, c);
+		}
+		
 		k_sleep(K_MSEC(1000u));
 	}
 }

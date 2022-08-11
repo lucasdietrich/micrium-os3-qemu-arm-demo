@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#ifndef _BSP_H_
-#define _BSP_H_
+#ifndef _DEVICE_H_
+#define _DEVICE_H_
 
 #include <stdio.h>
 #include <stddef.h>
@@ -31,7 +31,7 @@ struct device
 
 struct serial_api
 {
-	void (*init)(const struct device *serial);
+	int (*init)(const struct device *serial);
 	void (*poll_out)(const struct device *serial, unsigned char c);
 	int (*poll_in)(const struct device *serial, unsigned char *c);
 };
@@ -39,10 +39,10 @@ struct serial_api
 #define SERIAL_API_GET(_device) \
 	DEVICE_API_GET(_device, struct serial_api)
 
-void serial_init(const struct device *serial);
+int serial_init(const struct device *serial);
 
 void serial_poll_out(const struct device *serial, unsigned char c);
 
 int serial_poll_in(const struct device *serial, unsigned char *c);
 
-#endif
+#endif /* _DEVICE_H_ */

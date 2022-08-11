@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#ifndef _BOARD_H_
-#define _BOARD_H_
+#ifndef _MPS2_AN385_BOARD_H_
+#define _MPS2_AN385_BOARD_H_
 
 #include <device.h>
 #include <CMSDK_CM3.h>
@@ -16,4 +16,4 @@ extern const struct device cmsdk_uart2;
 extern const struct device cmsdk_uart3;
 extern const struct device cmsdk_uart4;
 
-#endif /* _BOARD_H_ */
+#endif /* _MPS2_AN385_BOARD_H_ */

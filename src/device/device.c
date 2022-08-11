@@ -6,9 +6,9 @@
 
 #include <device.h>
 
-void serial_init(const struct device *serial)
+int serial_init(const struct device *serial)
 {
-	SERIAL_API_GET(serial)->init(serial);
+	return SERIAL_API_GET(serial)->init(serial);
 }
 
 void serial_poll_out(const struct device *serial, unsigned char c)

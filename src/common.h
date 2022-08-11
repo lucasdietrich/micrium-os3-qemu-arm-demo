@@ -21,18 +21,18 @@
                ((((uint16_t)(n) & 0xFF00)) >> 8))
 
 
-#define MIN(a, b) ((a < b) ? (a) : (b))
-#define MAX(a, b) ((a > b) ? (a) : (b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
 #define CONTAINER_OF(ptr, type, field) ((type *)(((char *)(ptr)) - offsetof(type, field)))
 
 #define BIT(b) (1 << (b))
-#define SET_BIT(x, b)  ((x) |= b)
+#define SET_BIT(x, b)  ((x) |= (b))
 #define CLR_BIT(x, b)  ((x) &= (~(b)))
 #define TEST_BIT(x, b) ((bool) ((x) & b))
 
-#define ARG_UNUSED(arg) ((void) arg)
+#define ARG_UNUSED(arg) ((void) (arg))
 
-#define IN_RANGE(x, a, b) ((x >= a) && (x <= b))
+#define IN_RANGE(x, a, b) (((x) >= (a)) && ((x) <= (b)))
 
 #endif

@@ -21,25 +21,25 @@
  * Read technical reference manual ARM DDI 0479D, section cmsdk_apb_uart
  */
 
-struct uart_cmsdk_serial_config
+struct cmsdk_uart_serial_config
 {
 	CMSDK_UART_TypeDef *const uart;
 };
 
 #define CMSDK_UART_REGS_GET(_dev) \
-	DEVICE_CONFIG_GET(_dev, struct uart_cmsdk_serial_config)->uart
+	DEVICE_CONFIG_GET(_dev, struct cmsdk_uart_serial_config)->uart
 
-#define CMSDK_UART_INIT(_name, _uart) \
+#define CMSDK_UART_DEFINE(_name, _uart) \
 	const struct device _name = { \
 		.api = &api, \
 		.data = NULL, \
 		.config =  \
-		&(struct uart_cmsdk_serial_config) { \
+		&(struct cmsdk_uart_serial_config) { \
 			.uart = _uart \
 		} \
 	}
 
-static void init(const struct device *serial)
+static int init(const struct device *serial)
 {
 	CMSDK_UART_TypeDef *const uart = CMSDK_UART_REGS_GET(serial);
 
@@ -48,6 +48,8 @@ static void init(const struct device *serial)
 
 	/* Enable RX and TX */
 	uart->CTRL = CMSDK_UART_CTRL_RXEN_Msk | CMSDK_UART_CTRL_TXEN_Msk;
+
+	return 0;
 }
 
 static void poll_out(const struct device *serial, unsigned char c)
@@ -82,8 +84,8 @@ static const struct serial_api api = {
 	.poll_in = poll_in
 };
 
-CMSDK_UART_INIT(cmsdk_uart0, CMSDK_UART0);
-CMSDK_UART_INIT(cmsdk_uart1, CMSDK_UART1);
-CMSDK_UART_INIT(cmsdk_uart2, CMSDK_UART2);
-CMSDK_UART_INIT(cmsdk_uart3, CMSDK_UART3);
-CMSDK_UART_INIT(cmsdk_uart4, CMSDK_UART4);
+CMSDK_UART_DEFINE(cmsdk_uart0, CMSDK_UART0);
+CMSDK_UART_DEFINE(cmsdk_uart1, CMSDK_UART1);
+CMSDK_UART_DEFINE(cmsdk_uart2, CMSDK_UART2);
+CMSDK_UART_DEFINE(cmsdk_uart3, CMSDK_UART3);
+CMSDK_UART_DEFINE(cmsdk_uart4, CMSDK_UART4);
