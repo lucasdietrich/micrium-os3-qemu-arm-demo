@@ -19,7 +19,10 @@
         "net_ascii.h": "c",
         "net_ipv4.h": "c",
         "os_app_hooks.h": "c",
-        "board.h": "c"
+        "board.h": "c",
+        "core_cm3.h": "c",
+        "armcm3.h": "c",
+        "cmsdk_cm3.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true
 }
