@@ -1,5 +1,6 @@
-BOARD="lm3s6965evb"
 BOARD="netduinoplus2"
+BOARD="lm3s6965evb"
+BOARD="mps2_an385"
 
 all: cmake make
 

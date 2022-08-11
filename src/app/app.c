@@ -111,7 +111,7 @@ error:
 
 #endif
 
-#if defined(LM3S6965EVB)
+#if defined(LM3S6965EVB) || defined(MPS2_AN385)
 
 void app_init(void)
 {

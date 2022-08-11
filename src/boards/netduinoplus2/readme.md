@@ -1,4 +1,4 @@
-# Board `netduinoplus2` (ARM Cortex M4 - ARMv7-m)
+# Board `netduinoplus2` (STM32 - ARM Cortex M4 - ARMv7-m)
 
 TODO:
 - Add support for CCM SRAM

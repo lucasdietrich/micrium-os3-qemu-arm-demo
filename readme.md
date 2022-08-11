@@ -178,3 +178,13 @@ Character device options:
 ## Versions
 
 - QEMU emulator version 7.0.0 (v7.0.0)
+
+## Ressources
+- Interesting repos:
+  - https://github.com/japaric-archived/lm3s6965evb
+  - https://github.com/pokitoz/qemu-lm3s6965evb
+    - Particularly:
+      - Semihost console: https://github.com/pokitoz/qemu-lm3s6965evb/blob/master/start.c
+      - MPU: https://github.com/pokitoz/qemu-lm3s6965evb/blob/master/main.c
+  - https://github.com/Introduction-To-System-On-Chip/QEMU_lm3s6965evb
+  - https://github.com/moslevin/mark3-bsp-qemu_lm3s6965evb

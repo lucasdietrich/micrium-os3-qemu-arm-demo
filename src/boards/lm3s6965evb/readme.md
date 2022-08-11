@@ -2,6 +2,7 @@
 
 TODO:
 - Use Stellaris Ethernet with micrium TCP/IP stack.
+  - Compare with how Zephyr RTOS uses the driver.
 
 Specs:
 - 128KB Flash
