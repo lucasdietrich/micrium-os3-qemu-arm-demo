@@ -27,15 +27,6 @@ target_sources(${target} PRIVATE ${BOARD_SOURCES})
 file(GLOB BOARD_DEVICES_SOURCES ${CMAKE_CURRENT_LIST_DIR}/dev/*.c)
 target_sources(${target} PRIVATE ${BOARD_DEVICES_SOURCES})
 
-set(UCOS3_ARCH_SOURCES
-    ${CMAKE_SOURCE_DIR}/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/GNU/os_cpu_a.S
-	${CMAKE_SOURCE_DIR}/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/os_cpu_c.c
-
-	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/GNU/cpu_a.s
-	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/cpu_c.c
-)
-target_sources(${target} PRIVATE ${UCOS3_ARCH_SOURCES})
-
 set(STM32_HAL_SRC_PATH ${CMAKE_SOURCE_DIR}/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src)
 set(STM32_HAL_DRIVERS_SOURCES
 	# ${STM32_HAL_SRC_PATH}/stm32f4xx_hal_adc.c
@@ -144,14 +135,8 @@ set(C_BOARD_INCLUDES
 	${CMAKE_SOURCE_DIR}/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Inc
 
 	# Application drivers configuration
-	${CMAKE_CURRENT_LIST_DIR}/drv
-	${CMAKE_CURRENT_LIST_DIR}/cfg
-	${CMAKE_CURRENT_LIST_DIR}/sys
-	${CMAKE_CURRENT_LIST_DIR}/.
-
-	# Rest of specific Micrium headers
-    ${CMAKE_SOURCE_DIR}/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/GNU
-	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/GNU
+	${CMAKE_CURRENT_SOURCE_DIR}/sys/
+	${CMAKE_CURRENT_SOURCE_DIR}/
 )
 target_include_directories(${target} PRIVATE ${C_BOARD_INCLUDES})
 

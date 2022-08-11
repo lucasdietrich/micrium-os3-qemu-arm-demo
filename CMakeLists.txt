@@ -52,23 +52,23 @@ else()
 	message(FATAL_ERROR "Unknown board '${BOARD}'")
 endif()
 
+# add_subdirectory(src/boards/${BOARD})
+
 add_subdirectory(src/app)
 add_subdirectory(src/device)
+add_subdirectory(src/middlewares)
 
 set(C_SOURCES
     src/os/os_app_hooks.c
 	src/entry.c
 )
 
-set(C_INCLUDES
-	# Application os configuration
-	src/os
+set(UCOS3_ARCH_SOURCES
+	${CMAKE_SOURCE_DIR}/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/GNU/os_cpu_a.S
+	${CMAKE_SOURCE_DIR}/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/os_cpu_c.c
 
-	# BSP headers
-	src/boards
-
-	# Application headers
-    src
+	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/GNU/cpu_a.s
+	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/cpu_c.c
 )
 
 set(UCOS3_SOURCES_KAL "uC-Common/KAL/uCOS-III/kal.c")
@@ -104,7 +104,7 @@ set(UCOS3_SOURCES_TCPIP ${UCOS3_SOURCES_TCPIP_BASE} ${UCOS3_SOURCES_TCPIP_IPV4} 
 
 file(GLOB UCOS3_LIB_SOURCES uC-LIB/*.c)
 
-set(UCOS3_INCLUDES
+set(C_UCOS3_INCLUDES
     uC-OS3/Source
 	uC-OS3
 
@@ -112,11 +112,24 @@ set(UCOS3_INCLUDES
 	uC-LIB
 	uC-TCP-IP
 	uC-Common
+
+    ${CMAKE_SOURCE_DIR}/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/GNU
+	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/GNU
 )
 
-target_sources(${target} PRIVATE ${C_SOURCES} ${UCOS3_KERNEL_SOURCES} ${UCOS3_LIB_SOURCES} ${UCOS3_SOURCES_TCPIP} ${UCOS3_SOURCES_KAL})
+target_sources(${target} PRIVATE ${C_SOURCES} ${UCOS3_KERNEL_SOURCES} ${UCOS3_LIB_SOURCES} ${UCOS3_SOURCES_TCPIP} ${UCOS3_SOURCES_KAL} ${UCOS3_ARCH_SOURCES})
 
-target_include_directories(${target} PRIVATE ${C_INCLUDES} ${UCOS3_INCLUDES})
+set(C_INCLUDES
+	# Application os configuration
+	src/os
+
+	# BSP headers
+	src/boards
+
+	# Application headers
+    src
+)
+target_include_directories(${target} PRIVATE ${C_INCLUDES} ${C_UCOS3_INCLUDES})
 
 message(STATUS "Compiling ${target} CPU=${CPU}")
 

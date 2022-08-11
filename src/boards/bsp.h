@@ -3,8 +3,4 @@
 
 #include <device.h>
 
-extern struct device *const serial_console;
-extern struct device *const serial_console;
-extern struct device *const serial_console;
-
 #endif /* _BOARD_H_ */

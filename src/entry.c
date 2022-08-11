@@ -43,7 +43,7 @@ void sys_task(void *p_arg)
 	}
 }
 
-#define MISC_TASK_COUNT 	2u
+#define MISC_TASK_COUNT 	0u
 #define MISC_TASK_STACK_SIZE 	0x100u
 #define MISC_TASK_PRIORITY	12u
 #define MISC_TASK_DELAY_SEC	5u
