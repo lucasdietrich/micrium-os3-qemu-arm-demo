@@ -147,7 +147,6 @@ set(C_BOARD_INCLUDES
 	${CMAKE_CURRENT_LIST_DIR}/drv
 	${CMAKE_CURRENT_LIST_DIR}/cfg
 	${CMAKE_CURRENT_LIST_DIR}/sys
-	${CMAKE_CURRENT_LIST_DIR}/dev
 	${CMAKE_CURRENT_LIST_DIR}/.
 
 	# Rest of specific Micrium headers
@@ -155,3 +154,5 @@ set(C_BOARD_INCLUDES
 	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/GNU
 )
 target_include_directories(${target} PRIVATE ${C_BOARD_INCLUDES})
+
+add_subdirectory(drv)

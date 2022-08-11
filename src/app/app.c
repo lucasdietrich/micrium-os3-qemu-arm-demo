@@ -6,6 +6,8 @@
 #include <string.h>
 #include <errno.h>
 
+#include <board.h>
+
 #include <osal.h>
 
 #if defined(NETDUINOPLUS2)
@@ -111,7 +113,7 @@ error:
 
 #endif
 
-#if defined(LM3S6965EVB) || defined(MPS2_AN385)
+#if defined(LM3S6965EVB)
 
 void app_init(void)
 {
@@ -124,4 +126,26 @@ void app_task(void *p_arg)
 		k_sleep(K_MSEC(1000u));
 	}
 }
+#endif
+
+#if defined(MPS2_AN385)
+
+void app_init(void)
+{
+	serial_init(&cmsdk_uart0);
+	serial_init(&cmsdk_uart2);
+}
+
+void app_task(void *p_arg)
+{
+	unsigned char c;
+	for (;;) {
+		if (serial_poll_in(&cmsdk_uart0, &c) == 0) {
+			serial_poll_out(&cmsdk_uart0, c);
+			serial_poll_out(&cmsdk_uart2, c);
+		}
+		k_sleep(K_MSEC(100u));
+	}
+}
+
 #endif

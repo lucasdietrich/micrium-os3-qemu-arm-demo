@@ -2,7 +2,7 @@ set(LINKER_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/MPS2.ld" PARENT_SCOPE)
 set(CPU "cortex-m3" PARENT_SCOPE)
 set(target "${PROJECT_NAME}.elf" PARENT_SCOPE)
 set(QEMU_MACHINE "mps2-an385" PARENT_SCOPE)
-set(ICOUNT_SHIFT 5 PARENT_SCOPE)
+set(ICOUNT_SHIFT 4 PARENT_SCOPE)
 
 set(BOARD_DEFINES
 	"-DMPS2_AN385"
@@ -45,7 +45,6 @@ set(C_BOARD_INCLUDES
 	${CMAKE_CURRENT_LIST_DIR}/drv
 	${CMAKE_CURRENT_LIST_DIR}/cfg
 	${CMAKE_CURRENT_LIST_DIR}/sys
-	${CMAKE_CURRENT_LIST_DIR}/dev
 	${CMAKE_CURRENT_LIST_DIR}/.
 
 	# Rest of specific Micrium headers
@@ -53,3 +52,5 @@ set(C_BOARD_INCLUDES
 	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/GNU
 )
 target_include_directories(${target} PRIVATE ${C_BOARD_INCLUDES})
+
+add_subdirectory(drv)

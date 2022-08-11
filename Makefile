@@ -1,3 +1,5 @@
+DO_DISASSEMBLY=0
+
 BOARD="netduinoplus2"
 BOARD="lm3s6965evb"
 BOARD="mps2_an385"
@@ -5,7 +7,7 @@ BOARD="mps2_an385"
 all: cmake make
 
 cmake:
-	cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain-arm-none-eabi.cmake -DCMAKE_BUILD_TYPE=Debug -DDO_DISASSEMBLY=1 -DBOARD=$(BOARD) -S . -B build
+	cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain-arm-none-eabi.cmake -DCMAKE_BUILD_TYPE=Debug -DDO_DISASSEMBLY=$(DO_DISASSEMBLY) -DBOARD=$(BOARD) -S . -B build
 
 make:
 	make -C build --no-print-directory

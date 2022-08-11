@@ -31,9 +31,20 @@ Ethernet Driver - smsc911x :
     - https://github.com/ARMmbed/mbed-os/blob/master/targets/TARGET_ARM_FM/TARGET_FVP_MPS2/drivers/lan91c111.h
   - QEMU driver emulation: https://github.com/qemu/qemu/blob/master/hw/net/smc91c111.c
 
-UART Driver - cmsdk_uart :
-- Zephyr RTOS: https://github.com/zephyrproject-rtos/zephyr/blob/main/drivers/serial/uart_cmsdk_apb.c
-- QEMU driver emulation: https://github.com/qemu/qemu/blob/master/hw/char/cmsdk-apb-uart.c
+```cpp
+typedef struct
+{
+  __IO   uint32_t  DATA;                     /* Offset: 0x000 (R/W) Data Register    */
+  __IO   uint32_t  STATE;                    /* Offset: 0x004 (R/W) Status Register  */
+  __IO   uint32_t  CTRL;                     /* Offset: 0x008 (R/W) Control Register */
+  union {
+    __I    uint32_t  INTSTATUS;              /* Offset: 0x00C (R/ ) Interrupt Status Register */
+    __O    uint32_t  INTCLEAR;               /* Offset: 0x00C ( /W) Interrupt Clear Register  */
+    };
+  __IO   uint32_t  BAUDDIV;                  /* Offset: 0x010 (R/W) Baudrate Divider Register */
+
+} CMSDK_UART_TypeDef;
+```
 
 Other supported mps2 boards:
 ```

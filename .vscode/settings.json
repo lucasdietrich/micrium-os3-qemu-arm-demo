@@ -22,7 +22,13 @@
         "board.h": "c",
         "core_cm3.h": "c",
         "armcm3.h": "c",
-        "cmsdk_cm3.h": "c"
+        "cmsdk_cm3.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "ranges": "c",
+        "span": "c"
     },
-    "bookmarks.saveBookmarksInProject": true
+    "bookmarks.saveBookmarksInProject": true,
+    "editor.rulers": [80]
 }
