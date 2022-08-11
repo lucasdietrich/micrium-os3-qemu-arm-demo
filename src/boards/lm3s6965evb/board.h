@@ -10,4 +10,7 @@ extern const struct device stellaris_uart0;
 extern const struct device stellaris_uart1;
 extern const struct device stellaris_uart2;
 
+#define serial_console (&stellaris_uart0)
+#define serial_log (&stellaris_uart0)
+
 #endif /* _BOARD_H_ */

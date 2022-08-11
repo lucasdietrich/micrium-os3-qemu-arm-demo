@@ -11,144 +11,21 @@
 
 #include <osal.h>
 
-#if defined(NETDUINOPLUS2)
-
-#include <stm32f405xx.h>
-#include <stm32f4xx_hal.h>
-#include <stm32f4xx_hal_uart.h>
-
-#define UART1_DEVICE USART1
-#define UART2_DEVICE USART2
-#define UART3_DEVICE USART3
-#define UART4_DEVICE UART4
-#define UART5_DEVICE UART5
-#define UART6_DEVICE USART6
-
-#define UART_INIT(_device) { .Instance = _device }
-
-// int fputc(int ch, FILE *f)
-// {
-// 	HAL_UART_Transmit(&huart[0u], (uint8_t *)&ch, 1, 0xFFFFu);
-
-// 	return ch;
-// }
-
-static HAL_StatusTypeDef app_uart_init(UART_HandleTypeDef *huart)
-{
-	HAL_StatusTypeDef ret = HAL_ERROR;
-
-	if (huart->Instance == NULL) {
-		goto error;
-	}
-
-	/* Initialize UART */
-	huart->Init.BaudRate = 115200u;
-	huart->Init.WordLength = UART_WORDLENGTH_8B;
-	huart->Init.StopBits = UART_STOPBITS_1;
-	huart->Init.Parity = UART_PARITY_NONE;
-	huart->Init.HwFlowCtl = UART_HWCONTROL_NONE;
-	huart->Init.Mode = UART_MODE_TX_RX;
-	huart->Init.OverSampling = UART_OVERSAMPLING_16;
-
-	ret = HAL_UART_Init(huart);
-
-error:
-	if (ret != HAL_OK) {
-		Error_Handler();
-	}
-
-	return ret;
-}
-
-static HAL_StatusTypeDef app_uart_send(UART_HandleTypeDef *huart,
-				       const char *buf,
-				       size_t len)
-{
-	HAL_StatusTypeDef ret;
-
-	ret = HAL_UART_Transmit(huart, (uint8_t *)buf, len, 0xFFFFu);
-
-	return ret;
-}
-
-static UART_HandleTypeDef huart[6u] = {
-	UART_INIT(UART1_DEVICE),
-	UART_INIT(UART2_DEVICE),
-	UART_INIT(UART3_DEVICE),
-	UART_INIT(UART4_DEVICE),
-	UART_INIT(UART5_DEVICE),
-	UART_INIT(UART6_DEVICE)
-};
+#if defined(serial_console) && defined(serial_log)
 
 void app_init(void)
 {
-	HAL_Init();
-
-	for (uint8_t i = 0; i < 6u; i++) {
-		app_uart_init(&huart[i]);
-	}
-}
-
-static const char message[] = "%lu - uart %p - Hello from QEMU ARM stm32f405 running Micrium OS 3 !\n";
-static char buf[0x100];
-
-void app_task(void *p_arg)
-{
-	for (uint32_t _i = 0u;;_i++) {
-		int wn;
-
-		for (uint8_t j = 0; j < 6u; j++) {
-			wn = snprintf(buf, sizeof(buf), message, _i, huart[j].Instance);
-			if (app_uart_send(&huart[j], buf, wn) != HAL_OK) {
-				goto error;
-			}
-		}
-		
-		k_sleep(K_MSEC(1000u));
-	}
-
-error:
-	Error_Handler();
-	__builtin_unreachable();
-}
-
-#endif
-
-#if defined(LM3S6965EVB)
-
-void app_init(void)
-{
-	serial_init(&stellaris_uart0);
+	serial_init(serial_console);
+	serial_init(serial_log);
 }
 
 void app_task(void *p_arg)
 {
 	unsigned char c;
 	for (;;) {
-		if (serial_poll_in(&stellaris_uart0, &c) == 0) {
-			serial_poll_out(&stellaris_uart0, c);
-		}
-		
-		k_sleep(K_MSEC(1000u));
-	}
-}
-#endif
-
-#if defined(MPS2_AN385)
-
-void app_init(void)
-{
-	serial_init(&cmsdk_uart0);
-	serial_init(&cmsdk_uart2);
-}
-
-void app_task(void *p_arg)
-{
-	unsigned char c;
-	for (;;) {
-		if (serial_poll_in(&cmsdk_uart0, &c) == 0) {
-			serial_poll_out(&cmsdk_uart0, c);
-			serial_poll_out(&cmsdk_uart2, c);
+		if (serial_poll_in(serial_console, &c) == 0) {
+			serial_poll_out(serial_console, c);
+			serial_poll_out(serial_log, c);
 		}
 		k_sleep(K_MSEC(100u));
 	}

@@ -16,4 +16,7 @@ extern const struct device cmsdk_uart2;
 extern const struct device cmsdk_uart3;
 extern const struct device cmsdk_uart4;
 
+#define serial_console (&cmsdk_uart0)
+#define serial_log (&cmsdk_uart1)
+
 #endif /* _MPS2_AN385_BOARD_H_ */
