@@ -36,7 +36,8 @@
         "system_lm3s.h": "c",
         "cstdlib": "c",
         "net_if.h": "c",
-        "net_bsp.h": "c"
+        "net_bsp.h": "c",
+        "app_net.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true,
     "editor.rulers": [80]

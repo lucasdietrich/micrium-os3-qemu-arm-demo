@@ -4,7 +4,15 @@
 ## SPDX-License-Identifier: Apache-2.0
 ## 
 
-file(GLOB app_sources *.c)
+set(app_sources
+    ${CMAKE_CURRENT_LIST_DIR}/app.c
+)
 
 target_sources(${target} PRIVATE ${app_sources})
+
+target_sources_ifdef(CONFIG_NETWORKING ${target} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/app_net.c 
+    ${CMAKE_CURRENT_LIST_DIR}/udp_client.c
+)
+
 target_include_directories(${target} PRIVATE .)

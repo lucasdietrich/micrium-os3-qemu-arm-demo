@@ -5,11 +5,14 @@ set(QEMU_MACHINE "mps2-an385" PARENT_SCOPE)
 set(ICOUNT_SHIFT 4 PARENT_SCOPE)
 set(QEMU_ADD_ARGS "${QEMU_ADD_ARGS} -nic tap,model=lan9118,script=no,downscript=no,ifname=zeth" PARENT_SCOPE)
 
+set(CONFIG_NETWORKING 1 PARENT_SCOPE)
+
 set(BOARD_DEFINES
 	"-DMPS2_AN385"
 	"-DCPU_CFG_NVIC_PRIO_BITS=3"
 	"-DARMCM3"
 	"-DFCPU=25000000ul"
+	"-DCONFIG_NETWORKING"
 )
 target_compile_definitions(${target} PRIVATE ${BOARD_DEFINES})
 

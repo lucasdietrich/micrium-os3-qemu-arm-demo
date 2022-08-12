@@ -31,9 +31,6 @@ void sys_task(void *p_arg)
 		OS_CPU_SysTickInitFreq(FCPU);
 	}
 
-	/* Networking stack must be initialized after OS has beenstarted */
-	app_net_init();
-
 	app_init();
 
 	app_task(p_arg);

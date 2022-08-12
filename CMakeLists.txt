@@ -8,6 +8,19 @@ cmake_minimum_required(VERSION 3.2)
 
 project(ucos3-qemu-app)
 
+# https://github.com/zephyrproject-rtos/zephyr/blob/main/cmake/modules/extensions.cmake#L1487-L1497
+function(add_subdirectory_ifdef feature_toggle source_dir)
+  if(${${feature_toggle}})
+    add_subdirectory(${source_dir} ${ARGN})
+  endif()
+endfunction()
+
+function(target_sources_ifdef feature_toggle target scope item)
+  if(${${feature_toggle}})
+    target_sources(${target} ${scope} ${item} ${ARGN})
+  endif()
+endfunction()
+
 set(SZ ${CMAKE_SIZE_UTIL})
 set(OBJCOPY ${CMAKE_OBJCOPY_UTIL})
 set(OBJDUMP ${CMAKE_OBJDUMP_UTIL})

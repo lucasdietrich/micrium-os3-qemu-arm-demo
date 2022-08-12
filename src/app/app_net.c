@@ -28,8 +28,6 @@
 uC-TCP-IP/Examples/Init/init_ether.c
 */
 
-extern CPU_BOOLEAN  App_UDP_Client(CPU_CHAR *p_ip_addr);
-
 /* https://github.com/WHJWNAVY/Micrium-uCOS/blob/master/src/Micrium/Examples/ST/BSP/STM32F746G_Disco/bsp_net_gmac.c */
 
 int app_net_init(void)
@@ -100,12 +98,6 @@ int app_net_init(void)
         return (DEF_FAIL);
     }
 #endif
-
-    while (DEF_TRUE) {
-	    App_UDP_Client("192.0.2.2");
-	    
-	    k_sleep(K_SECONDS(5));
-    }
 
     return DEF_OK;
 }
