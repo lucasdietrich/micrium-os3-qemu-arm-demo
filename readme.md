@@ -120,6 +120,8 @@ Search for `system clock` in the datasheet.
 # Notes
 - Add MPS2 AN386 board for emulated Cortex-M4 test coverage: https://github.com/zephyrproject-rtos/zephyr/issues/45319
 
+## Zephyr SLIP
+
 Zephyr run QEMU (x86) command for `hello_world` sample:
 ```
 cd /home/lucas/zephyrproject/hello_world/build && /home/lucas/zephyr-sdk-0.14.2/sysroots/x86_64-pokysdk-linux/usr/bin/qemu-system-i386 -m 4 -cpu qemu32,+nx,+pae -device isa-debug-exit,iobase=0xf4,iosize=0x04 -no-reboot -nographic -no-acpi -net none -pidfile qemu.pid -chardev stdio,id=con,mux=on -serial chardev:con -mon chardev=con,mode=readline -icount shift=5,align=off,sleep=off -rtc clock=vm -kernel /home/lucas/zephyrproject/hello_world/build/zephyr/zephyr.elf
@@ -133,6 +135,18 @@ COMMAND = cd /home/lucas/zephyrproject/hello_world/build && /home/lucas/zephyr-s
 Zephyr run QEMU command for `qemu-zephyr-dev` project:
 ```
 COMMAND = cd /home/lucas/zephyrproject/zephyr-qemu-dev/build && /home/lucas/zephyr-sdk-0.14.2/sysroots/x86_64-pokysdk-linux/usr/bin/qemu-system-arm -cpu cortex-m3 -machine lm3s6965evb -nographic -vga none -net none -pidfile qemu.pid -chardev stdio,id=con,mux=on -serial chardev:con -mon chardev=con,mode=readline -serial unix:/tmp/slip.sock -s -S -kernel /home/lucas/zephyrproject/zephyr-qemu-dev/build/zephyr/zephyr.elf
+```
+
+## Zephyr mps2_an385 smsc911x driver
+
+Zephyr run QEMU command for `echo_server` project built with `overlay-smsc911x.conf`
+```
+COMMAND = cd /home/lucas/zephyrproject/echo_server/build && /home/lucas/zephyr-sdk-0.14.2/sysroots/x86_64-pokysdk-linux/usr/bin/qemu-system-arm -cpu cortex-m3 -machine mps2-an385 -nographic -vga none -nic tap,model=lan9118,script=no,downscript=no,ifname=zeth -pidfile qemu.pid -chardev stdio,id=con,mux=on -serial chardev:con -mon chardev=con,mode=readline -s -S -kernel /home/lucas/zephyrproject/echo_server/build/zephyr/zephyr.elf
+```
+
+Monitor with wireshark (from windows host):
+```
+ssh lucas@fedora sudo tcpdump -U -s0 'not port 22' -i zeth -w - | "C:\Program Files\Wireshark\Wireshark.exe" -k -i -
 ```
 
 > The current QEMU console configuration directly connects the console serial port to the backend using '-serial' option.

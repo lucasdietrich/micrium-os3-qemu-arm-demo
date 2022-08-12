@@ -34,7 +34,9 @@
         "random": "c",
         "lm3s6965.h": "c",
         "system_lm3s.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "net_if.h": "c",
+        "net_bsp.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true,
     "editor.rulers": [80]

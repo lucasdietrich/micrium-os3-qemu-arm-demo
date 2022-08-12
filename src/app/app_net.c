@@ -16,17 +16,17 @@
 
 #include  <IP/IPv4/net_ipv4.h>
 
-#include <net_dev_cfg.h>
+#include <net_dev_lan911x.h>
 
+#include <net_dev_cfg.h>
+#include <net_phy.h>
+
+#include <bsp/net_bsp.h>
 /* 
 uC-TCP-IP/Examples/Init/init_ether.c
 */
 
-void *NetDev_API_TemplateEtherDMA = NULL;
-void *NetDev_BSP_BoardDev_Nbr = NULL;
-// void *NetDev_Cfg_Ether_1 = NULL;
-void *NetPhy_API_Generic = NULL;
-// void *NetPhy_Cfg_Ether_1 = NULL;
+/* https://github.com/WHJWNAVY/Micrium-uCOS/blob/master/src/Micrium/Examples/ST/BSP/STM32F746G_Disco/bsp_net_gmac.c */
 
 int app_net_init(void)
 {
@@ -42,9 +42,9 @@ int app_net_init(void)
                                                                 /* -------------- ADD ETHERNET INTERFACE -------------- */
                                                                 /* See Note #3.                                         */
     if_nbr = NetIF_Add((void    *)&NetIF_API_Ether,             /* See Note #3b.                                        */
-                       (void    *)&NetDev_API_TemplateEtherDMA, /* TODO Device driver API,    See Note #3c.             */
-                       (void    *)&NetDev_BSP_BoardDev_Nbr,     /* TODO BSP API,              See Note #3d.             */
-                       (void    *)&NetDev_Cfg_Ether_1,          /* TODO Device configuration, See Note #3e.             */
+                       (void    *)&NetDev_API_LAN911x, /* TODO Device driver API,    See Note #3c.             */
+                       (void    *)&NetDev_BSP_LAN911x,     /* TODO BSP API,              See Note #3d.             */
+                       (void    *)&NetDev_Cfg_LAN911x_0,        /* TODO Device configuration, See Note #3e.             */
                        (void    *)&NetPhy_API_Generic,          /* TODO PHY driver API,       See Note #3f.             */
                        (void    *)&NetPhy_Cfg_Ether_1,          /* TODO PHY configuration,    See Note #3g.             */
                                   &err_net);
@@ -72,7 +72,7 @@ int app_net_init(void)
                                                                 /* ... requirements.                                    */
 
                                                                 /* See Note #5.                                         */
-    NetASCII_Str_to_IP("10.10.10.64",                           /* Convert Host IPv4 string address to 32 bit address.  */
+    NetASCII_Str_to_IP("192.0.2.1",                           /* Convert Host IPv4 string address to 32 bit address.  */
                        &addr_ipv4,
                         NET_IPv4_ADDR_SIZE,
                        &err_net);
@@ -82,7 +82,7 @@ int app_net_init(void)
                         NET_IPv4_ADDR_SIZE,
                        &err_net);
 
-    NetASCII_Str_to_IP("10.10.10.1",                            /* Convert Gateway string address to 32 bit address.    */
+    NetASCII_Str_to_IP("192.0.2.2",                            /* Convert Gateway string address to 32 bit address.    */
                        &gateway_ipv4,
                         NET_IPv4_ADDR_SIZE,
                        &err_net);

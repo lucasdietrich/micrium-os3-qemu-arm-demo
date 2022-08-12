@@ -1,8 +1,8 @@
 DO_DISASSEMBLY=0
 
 BOARD="netduinoplus2"
-BOARD="mps2_an385"
 BOARD="lm3s6965evb"
+BOARD="mps2_an385"
 
 all: cmake make
 
