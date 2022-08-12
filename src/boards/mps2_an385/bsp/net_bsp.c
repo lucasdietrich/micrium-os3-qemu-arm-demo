@@ -28,7 +28,7 @@
 *                            NETWORK BOARD SUPPORT PACKAGE (BSP) FUNCTIONS
 *                                         STM32F746G-DISCO
 *
-* Filename : bsp_net_gmac.c
+* Filename : nep_bsp.c
 * Version  : V3.04.05
 *********************************************************************************************************
 */
@@ -61,7 +61,7 @@
 *********************************************************************************************************
 */
 
-// static  NET_IF_NBR  STM32F746G_DISCO_GMAC_0_IF_Nbr = NET_IF_NBR_NONE;
+static  NET_IF_NBR  mps2_an385_if_1 = NET_IF_NBR_NONE;
 
 
 /*
@@ -84,7 +84,7 @@ static  void        NetDev_CfgGPIO_RMII    (NET_IF   *p_if,
 static  CPU_INT32U  NetDev_ClkFreqGet      (NET_IF   *p_if,
                                             NET_ERR  *p_err);
 
-static  void        NetDev_GMAC_ISR_Handler(void);
+static  void        NetDev_ISR_Handler(void);
 
 
 /*
@@ -189,19 +189,17 @@ static  void  NetDev_CfgClk (NET_IF   *p_if,
 *********************************************************************************************************
 */
 
-static  void  NetDev_CfgIntCtrl (NET_IF   *p_if,
-                                 NET_ERR  *p_err)
+static  void  NetDev_CfgIntCtrl(NET_IF *p_if,
+				NET_ERR *p_err)
 {
-//     STM32F746G_DISCO_GMAC_0_IF_Nbr = p_if->Nbr;                 /* Cfg this device's BSP instance with specific IF nbr. */
+	mps2_an385_if_1 = p_if->Nbr;                 /* Cfg this device's BSP instance with specific IF nbr. */
 
-//     BSP_IntVectSet(INT_ID_ETH,
-//                    CPU_CFG_KA_IPL_BOUNDARY,                     /* Make sure we are within the Kernel Aware boundary.   */
-//                    CPU_INT_KA,
-//                    NetDev_GMAC_ISR_Handler);
+	__NVIC_SetVector(ETHERNET_IRQn, (uint32_t)&NetDev_ISR_Handler);
+	__NVIC_SetPriority(ETHERNET_IRQn, 3u);
+	__NVIC_ClearPendingIRQ(ETHERNET_IRQn);
+	__NVIC_EnableIRQ(ETHERNET_IRQn);
 
-//     BSP_IntEnable(INT_ID_ETH);                                  /* Enable Ethernet Interrupt request.                   */
-
-   *p_err = NET_DEV_ERR_NONE;
+	*p_err = NET_DEV_ERR_NONE;
 }
 
 
@@ -288,8 +286,8 @@ static  void  NetDev_CfgGPIO_RMII (NET_IF   *p_if,
 *********************************************************************************************************
 */
 
-static  CPU_INT32U  NetDev_ClkFreqGet (NET_IF   *p_if,
-                                       NET_ERR  *p_err)
+static  CPU_INT32U  NetDev_ClkFreqGet(NET_IF *p_if,
+				      NET_ERR *p_err)
 {
 //     CPU_INT32U  clk_freq;
 
@@ -305,13 +303,13 @@ static  CPU_INT32U  NetDev_ClkFreqGet (NET_IF   *p_if,
 
 //     return (clk_freq);
 
-return 0;
+	return 0;
 }
 
 
 /*
 *********************************************************************************************************
-*                                        NetDev_GMAC_ISR_Handler()
+*                                        NetDev_ISR_Handler()
 *
 * Description : BSP-level ISR handler(s) for device interrupts
 *
@@ -324,22 +322,22 @@ return 0;
 *********************************************************************************************************
 */
 
-// static void  NetDev_GMAC_ISR_Handler (void)
-// {
-//     NET_ERR  err;
-//     CPU_SR_ALLOC();
+static void  NetDev_ISR_Handler (void)
+{
+    NET_ERR  err;
+    CPU_SR_ALLOC();
 
 
-//     CPU_CRITICAL_ENTER();
-//     OSIntEnter();                                               /* Tell OS that we are starting an ISR                  */
-//     CPU_CRITICAL_EXIT();
+    CPU_CRITICAL_ENTER();
+    OSIntEnter();                                               /* Tell OS that we are starting an ISR                  */
+    CPU_CRITICAL_EXIT();
 
-//     NetIF_ISR_Handler(STM32F746G_DISCO_GMAC_0_IF_Nbr, NET_DEV_ISR_TYPE_UNKNOWN, &err);
+    NetIF_ISR_Handler(mps2_an385_if_1, NET_DEV_ISR_TYPE_UNKNOWN, &err);
 
-//     OSIntExit();                                                /* Tell OS that we are leaving the ISR                  */
+    OSIntExit();                                                /* Tell OS that we are leaving the ISR                  */
 
-//    (void)err;
-// }
+   (void)err;
+}
 
 
 /*
