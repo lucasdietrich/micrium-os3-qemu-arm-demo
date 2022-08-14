@@ -23,7 +23,7 @@ struct device
 	((_type *) (_device)->data)
 
 #define DEVICE_CONFIG_GET(_device, _type) \
-	((const _type *) (_device)->config)
+	((_type *) (_device)->config)
 
 #define DEVICE_API_GET(_device, _type) \
 	((const _type *) (_device)->api)
@@ -44,5 +44,29 @@ int serial_init(const struct device *serial);
 void serial_poll_out(const struct device *serial, unsigned char c);
 
 int serial_poll_in(const struct device *serial, unsigned char *c);
+
+typedef void (*timer_callback_t)(const struct device *timer,
+				       void *user_data);
+
+struct timer_api
+{
+	int (*set_callback)(const struct device *timer,
+			    timer_callback_t callback,
+			    void *user_data);
+	int (*start)(const struct device *timer, uint32_t ticks);
+	int (*stop)(const struct device *timer);
+};
+
+#define TIMER_API_GET(_device) \
+	DEVICE_API_GET(_device, struct timer_api)
+
+int timer_set_callback(const struct device *timer,
+		       timer_callback_t callback,
+		       void *user_data);
+
+int timer_start(const struct device *timer, uint32_t ticks);
+
+int timer_stop(const struct device *timer);
+
 
 #endif /* _DEVICE_H_ */
