@@ -122,8 +122,8 @@ const  NET_PHY_CFG_ETHER  NetPhy_Cfg_Ether_1 = {
     1u,                             /* Phy bus address.                                                                 */
     NET_PHY_BUS_MODE_MII,           /* Phy bus mode.                                                                    */
     NET_PHY_TYPE_INT,               /* Phy type.                                                                        */
-    NET_PHY_SPD_AUTO,               /* Auto-Negotiation determines link speed.                                          */
-    NET_PHY_DUPLEX_AUTO,            /* Auto-Negotiation determines link duplex.                                         */
+    NET_PHY_SPD_100,                /* Auto-Negotiation determines link speed.                                          */
+    NET_PHY_DUPLEX_FULL,            /* Auto-Negotiation determines link duplex.                                         */
 };
 
 

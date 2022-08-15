@@ -1,0 +1,49 @@
+diff --git a/hw/net/lan9118.c b/hw/net/lan9118.c
+index 6aff424cbe..d10c1ef954 100644
+--- a/hw/net/lan9118.c
++++ b/hw/net/lan9118.c
+@@ -27,7 +27,7 @@
+ #include <zlib.h>
+ #include "qom/object.h"
+ 
+-//#define DEBUG_LAN9118
++// #define DEBUG_LAN9118
+ 
+ #ifdef DEBUG_LAN9118
+ #define DPRINTF(fmt, ...) \
+@@ -696,6 +696,14 @@ static void do_tx_packet(lan9118_state *s)
+     n = (s->tx_status_fifo_head + s->tx_status_fifo_used) & 511;
+     s->tx_status_fifo[n] = status;
+     s->tx_status_fifo_used++;
++
++    /* TX Status Level. The value in this field sets the level, in number of
++     * DWORDs, at which the TX Status FIFO Level interrupt (TSFL) will be
++     * generated. When the TX Status FIFO used space is greater than this value
++     * an TX Status FIFO Level interrupt (TSFL) will be generated. */
++    if (s->tx_status_fifo_used > ((s->fifo_int >> 16) & 0xff)) {
++        s->int_sts |= TSFL_INT;
++    }
+     if (s->tx_status_fifo_used == 512) {
+         s->int_sts |= TSFF_INT;
+         /* TODO: Stop transmission.  */
+@@ -1051,7 +1059,7 @@ static void lan9118_writel(void *opaque, hwaddr offset,
+         s->int_sts |= val & SW_INT;
+         break;
+     case CSR_FIFO_INT:
+-        DPRINTF("FIFO INT levels %08x\n", val);
++        DPRINTF("FIFO INT levels %08x\n", (uint32_t) val);
+         s->fifo_int = val;
+         break;
+     case CSR_RX_CFG:
+@@ -1134,9 +1142,9 @@ static void lan9118_writel(void *opaque, hwaddr offset,
+         if (val & 0x80000000) {
+             if (val & 0x40000000) {
+                 s->mac_data = do_mac_read(s, val & 0xf);
+-                DPRINTF("MAC read %d = 0x%08x\n", val & 0xf, s->mac_data);
++                DPRINTF("MAC read %u = 0x%08x\n", (uint32_t)(val & 0xf), s->mac_data);
+             } else {
+-                DPRINTF("MAC write %d = 0x%08x\n", val & 0xf, s->mac_data);
++                DPRINTF("MAC write %d = 0x%08x\n", (uint32_t)(val & 0xf), s->mac_data);
+                 do_mac_write(s, val & 0xf, s->mac_data);
+             }
+         }

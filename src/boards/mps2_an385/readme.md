@@ -32,21 +32,6 @@ Ethernet Driver - smsc911x :
   - QEMU driver emulation: https://github.com/qemu/qemu/blob/master/hw/net/smc91c111.c
 - Micrium implementation: **uC-TCP-IP/Dev/Ether/LAN911x**
 
-```cpp
-typedef struct
-{
-  __IO   uint32_t  DATA;                     /* Offset: 0x000 (R/W) Data Register    */
-  __IO   uint32_t  STATE;                    /* Offset: 0x004 (R/W) Status Register  */
-  __IO   uint32_t  CTRL;                     /* Offset: 0x008 (R/W) Control Register */
-  union {
-    __I    uint32_t  INTSTATUS;              /* Offset: 0x00C (R/ ) Interrupt Status Register */
-    __O    uint32_t  INTCLEAR;               /* Offset: 0x00C ( /W) Interrupt Clear Register  */
-    };
-  __IO   uint32_t  BAUDDIV;                  /* Offset: 0x010 (R/W) Baudrate Divider Register */
-
-} CMSDK_UART_TypeDef;
-```
-
 Other supported mps2 boards:
 ```
 [lucas@fedora uc-os3-qemu-arm-demo]$ qemu-system-arm -machine help | grep mps
@@ -59,3 +44,29 @@ mps2-an521           ARM MPS2 with AN521 FPGA image for dual Cortex-M33
 mps3-an524           ARM MPS3 with AN524 FPGA image for dual Cortex-M33
 mps3-an547           ARM MPS3 with AN547 FPGA image for Cortex-M55
 ```
+****
+## Ethernet driver - SMSC LAN911x
+
+Micrium supports the SMSC (now Microship) LAN911x Ethernet controller, partially
+implemented in QEMU.
+
+Known limitations (version 7.0.0 of QEMU with current Micrium stack):
+- `TSFL` interrupt flag is not handled in QEMU, so a patch is needed for it (TODO)
+  - (**REQUIRED**) A temporary workaround is to always check FIFO status registers.
+  Check function `NetDev_ISR_Handler` of `uC-TCP-IP/Dev/Ether/LAN911x/net_dev_lan911x.c`
+
+Also, additionnal points should be noted for micrium driver `uC-TCP-IP/Dev/Ether/LAN911x/net_dev_lan911x.c` :
+
+- (**REQUIRED**) Moreover Zephyr RTOS driver sets `INT_CFG_IRQ_POL` bit of `LAN91_INT_CFG`. 
+- (**OPTIONNAL**) Zephyr RTOS driver uses 220us of interrupt deassertion interval
+```cpp
+    reg_val  =  LAN91_INT_CFG;
+    reg_val |= (22 << 24)       |
+                INT_CFG_IRQ_EN  |
+                INT_CFG_IRQ_POL |
+                INT_CFG_IRQ_TYPE;
+    LAN91_INT_CFG = reg_val;
+```
+
+- TODO: Some UDP packets still fail to be send (because of pending operation).
+  - Check line 7312 of uC-TCP-IP/IF/net_if.c : `NetIF_DevTxRdyWait(p_if, p_err);`

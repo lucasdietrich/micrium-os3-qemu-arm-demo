@@ -1,6 +1,32 @@
-**TODO currently on this error: Line 657 of `uC-TCP-IP/IF/net_if_ether.c`**
+# Micrium OS III demo application for QEMU (Networking)
 
-# QEMU
+Attempt to test networking feature of a Micrium OS III application in QEMU for ARM.
+
+Currently, the following boards and features are planned (P), being implemented (I) and tested (T):
+
+| Board (QEMU / cpu)        | Arch            | Manufacturer | Ethernet driver | Current state                 |
+| ------------------------- | --------------- | ------------ | --------------- | ----------------------------- |
+| mps2_an385                | ARMv7 Cortex M3 |              | smsc911x        | Ethernet, UART, timer drivers |
+| netduinoplus2 - stm32f405 | ARMv7 Cortex M4 |              | -               | -                             |
+| Stellaris - lm3s6965evb   | ARMv7 Cortex M3 | TI           | stellaris       | UART driver                   |
+
+## TODO
+
+- Documentation:
+  - Explain how to build QEMU (with patches)
+  - How to build the application
+  - How to setup the network (scripts, etc ...)
+  - How to debug (QEMU debug, logging subsystem, wireshark)
+  - Ressources to documentation
+- Forward ports to test server capabilities
+
+- Steps:
+  - Check TCP capabilities (client/server), including robustness
+  - Implement TLS (client) communication using mbedTLS
+  - Implement RAM FS
+  - Implement and test a complete application (using networking/FS)
+
+## QEMU
 
 - Documentation: https://qemu.readthedocs.io/en/latest/system/invocation.html
 - How Zephyr handles QEMU : https://github.com/zephyrproject-rtos/zephyr/blob/main/cmake/emu/qemu.cmake
@@ -8,7 +34,9 @@
   - https://github.com/zephyrproject-rtos/net-tools/blob/master/README.md
   - https://github.com/zephyrproject-rtos/net-tools/blob/master/README%20NAT.md
 
-# Micrium
+
+
+## Micrium
 
 - [weston-embedded / uC-OS3](https://github.com/weston-embedded/uC-OS3)
 - [µC documentation Spaces](https://micrium.atlassian.net/wiki/spaces)
@@ -69,7 +97,7 @@ Page 81 of RM0090 Rev 19:
 
 ---
 
-# Micrium OS 3 demo for QEMU (Cortex M3)
+## Micrium OS 3 demo for QEMU (Cortex M3)
 
 Using `qemu-system-arm` machine `lm3s6965evb` Stellaris LM3S6965EVB (Cortex-M3).
 - Armv7-M
@@ -117,7 +145,7 @@ Search for `system clock` in the datasheet.
 
 ---
 
-# Notes
+## Notes
 - Add MPS2 AN386 board for emulated Cortex-M4 test coverage: https://github.com/zephyrproject-rtos/zephyr/issues/45319
 
 ## Zephyr SLIP
@@ -191,7 +219,8 @@ Character device options:
 ---
 ## Versions
 
-- QEMU emulator version 7.0.0 (v7.0.0)
+- QEMU emulator version 7.0.0 (v7.0.0) + following patches:
+  - [res/qemu_lan911x_tsfl_int.patch](./res/qemu_lan911x_tsfl_int.patch)
 
 ## Ressources
 - Interesting repos:
@@ -202,3 +231,12 @@ Character device options:
       - MPU: https://github.com/pokitoz/qemu-lm3s6965evb/blob/master/main.c
   - https://github.com/Introduction-To-System-On-Chip/QEMU_lm3s6965evb
   - https://github.com/moslevin/mark3-bsp-qemu_lm3s6965evb
+
+## Debug network remotely using Wireshark and tcpdump
+
+- On windows: `ssh lucas@fedora sudo tcpdump -U -s0 'not port 22' -i tap0 -w - | "C:\Program Files\Wireshark\Wireshark.exe" -k -i -`
+- On linux: `ssh lucas@fedora sudo tcpdump -U -s0 'not port 22' -i tap0 -w - | wireshark -k -i -`
+
+## Tips (always good to remember)
+
+- No heavy computing in ISR (example logging in ethernet ISR)

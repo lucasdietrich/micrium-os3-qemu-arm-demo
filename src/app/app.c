@@ -7,12 +7,21 @@
 #include <errno.h>
 
 #include <board.h>
-
 #include <osal.h>
-
 #include <app_net.h>
 
+#include <logging.h>
+LOG_MODULE_REGISTER(app_net, LOG_LEVEL_DBG);
+
 #if defined(serial_console) && defined(serial_log)
+
+int _write(int fd, char *buf, int count)
+{
+	for (; count != 0; --count) {
+		serial_poll_out(serial_console, *buf++);
+	}
+	return count;
+}
 
 void timer0_app_handler(const struct device *dev, void *user_data)
 {
@@ -35,6 +44,8 @@ void app_init(void)
 
 void app_task(void *p_arg)
 {
+	LOG_INF("App task starting");
+
 	unsigned char c;
 	for (;;) {
 		if (serial_poll_in(serial_console, &c) == 0) {
@@ -45,12 +56,9 @@ void app_task(void *p_arg)
 		k_sleep(K_MSEC(100u));
 
 #if defined(CONFIG_NETWORKING)
-		App_UDP_Client("192.0.2.2");
+		App_UDP_Client("192.168.10.216");
 
 		k_sleep(K_SECONDS(5));
-
-		/* Networking stack must be initialized after OS has beenstarted */
-		app_net_init();
 #endif
 	}
 }

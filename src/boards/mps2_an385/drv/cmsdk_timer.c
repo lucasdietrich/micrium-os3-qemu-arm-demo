@@ -28,7 +28,7 @@
 
 #define TIMER_ISR_PRIORITY		3u
 
-struct cmsdk_timer_config
+struct cmsdk_timer
 {
 	CMSDK_TIMER_TypeDef *timer;
 	IRQn_Type irq_n;
@@ -38,12 +38,12 @@ struct cmsdk_timer_config
 };
 
 #define CMSDK_TIMER_REGS_GET(_dev) \
-	DEVICE_CONFIG_GET(_dev, struct cmsdk_timer_config)->timer
+	DEVICE_CONFIG_GET(_dev, struct cmsdk_timer)->timer
 
 static inline void timer_handler(const struct device *timer)
 {
-	struct cmsdk_timer_config *config = 
-		DEVICE_CONFIG_GET(timer, struct cmsdk_timer_config);
+	struct cmsdk_timer *config =
+		DEVICE_CONFIG_GET(timer, struct cmsdk_timer);
 	config->timer->INTCLEAR = 1;
 	config->callback(timer, config->user_data);
 }
@@ -56,7 +56,7 @@ void _nvic_isr(void) { timer_handler(_device_ptr); }
 		.api = &cmsdk_timer_api, \
 		.data = NULL, \
 		.config =  \
-		&(struct cmsdk_timer_config) { \
+		&(struct cmsdk_timer) { \
 			.timer = _timer, \
 			.irq_n = _nvic_isr_n, \
 			.callback = NULL, \
@@ -70,8 +70,8 @@ static int set_callback(const struct device *timer,
 			void *user_data)
 {
 	int ret = -EINVAL;
-	struct cmsdk_timer_config *const config =
-		DEVICE_CONFIG_GET(timer, struct cmsdk_timer_config);
+	struct cmsdk_timer *const config =
+		DEVICE_CONFIG_GET(timer, struct cmsdk_timer);
 
 	if (callback != NULL) {
 		config->callback = callback;
@@ -84,8 +84,8 @@ static int set_callback(const struct device *timer,
 
 static int start(const struct device *timer, uint32_t ticks)
 {
-	struct cmsdk_timer_config *const config =
-		DEVICE_CONFIG_GET(timer, struct cmsdk_timer_config);
+	struct cmsdk_timer *const config =
+		DEVICE_CONFIG_GET(timer, struct cmsdk_timer);
 
 	if (config->callback == NULL) {
 		return -EINVAL;
@@ -93,7 +93,7 @@ static int start(const struct device *timer, uint32_t ticks)
 
 	CMSDK_TIMER_TypeDef *const regs = config->timer;
 
-	/* Clear pending interrupts */
+	/* Reset interrupt config and status */
 	regs->CTRL = 0;
 	regs->INTCLEAR = 1u;
 

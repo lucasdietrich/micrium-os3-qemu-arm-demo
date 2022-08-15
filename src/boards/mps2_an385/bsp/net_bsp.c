@@ -303,6 +303,8 @@ static  CPU_INT32U  NetDev_ClkFreqGet(NET_IF *p_if,
 
 //     return (clk_freq);
 
+	*p_err = NET_DEV_ERR_NONE;
+	
 	return 0;
 }
 

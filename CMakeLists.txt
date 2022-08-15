@@ -170,7 +170,9 @@ target_link_options(${target} PRIVATE
 
 	-lc
 	-lm
-	-lnosys
+	# -nostdlib
+	# -lnosys
+	# -specs=nano.specs
 	
 	# already defined in the toolchain
 	# -specs=nano.specs
@@ -215,6 +217,14 @@ add_custom_target(qemu
 add_custom_target(run
 	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -nodefaults -nographic -semihosting -icount shift=${ICOUNT_SHIFT},align=off,sleep=on -rtc clock=vm -vga none -nographic -device loader,file=${target} -pidfile qemu.pid -chardev stdio,id=myCon -serial chardev:myCon -chardev file,id=myFile,mux=on,path=io.txt -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile ${QEMU_ADD_ARGS}
 )
+
+# Show help for debug:
+# -d trace:help
+# -d help
+# -d cpu_reset
+
+# Enable debug in lan9118 
+# goto `hw/net/lan9118.c` and set DEBUG_LAN9118 
 
 # Two followin configuration are equivalent
 # -nodefaults -chardev stdio,id=myCon,mux=on -serial chardev:myCon

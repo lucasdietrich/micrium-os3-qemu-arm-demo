@@ -40,6 +40,8 @@
 #include  <Source/net_util.h>
 #include  <Source/net_ascii.h>
 
+#include <logging.h>
+LOG_MODULE_REGISTER(udp_client, LOG_LEVEL_DBG);
 
 /*
 *********************************************************************************************************
@@ -175,6 +177,12 @@ CPU_BOOLEAN  App_UDP_Client (CPU_CHAR  *p_ip_addr)
                                    (NET_SOCK_ADDR *)&server_sock_addr,
                                                      NET_SOCK_ADDR_SIZE,
                                                     &err);
+	if (err != NET_SOCK_ERR_NONE) {
+		LOG_ERR("NetSock_TxDataTo failed: %d", err);
+	} else {
+		LOG_INF("NetSock_TxDataTo succeeded");
+	}
+
         switch (err) {
             case NET_SOCK_ERR_NONE:
                  tx_rem -=  tx_size;
@@ -211,6 +219,13 @@ CPU_BOOLEAN  App_UDP_Client (CPU_CHAR  *p_ip_addr)
                                                   DEF_NULL,
                                                   DEF_NULL,
                                                  &err);
+
+	if (err != NET_SOCK_ERR_NONE) {
+		LOG_WRN("NetSock_RxDataFrom failed: %d", err);
+	} else {
+		LOG_INF("NetSock_RxDataFrom succeeded");
+	}
+
         switch (err) {
             case NET_SOCK_ERR_NONE:
                  rx_rem -=  rx_size;

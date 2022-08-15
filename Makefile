@@ -1,8 +1,10 @@
-DO_DISASSEMBLY=0
-
-BOARD="netduinoplus2"
-BOARD="lm3s6965evb"
+# Choose the target to build
+# BOARD="netduinoplus2"
+# BOARD="lm3s6965evb"
 BOARD="mps2_an385"
+
+# Tell if disassembly files should be generated (could take additional time)
+DO_DISASSEMBLY=1
 
 all: cmake make
 

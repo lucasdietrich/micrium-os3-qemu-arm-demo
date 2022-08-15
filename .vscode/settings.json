@@ -37,7 +37,10 @@
         "cstdlib": "c",
         "net_if.h": "c",
         "net_bsp.h": "c",
-        "app_net.h": "c"
+        "app_net.h": "c",
+        "chrono": "c",
+        "algorithm": "c",
+        "logging.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true,
     "editor.rulers": [80]
