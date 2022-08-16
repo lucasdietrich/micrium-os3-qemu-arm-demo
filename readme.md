@@ -19,6 +19,9 @@ Currently, the following boards and features are planned (P), being implemented 
   - How to debug (QEMU debug, logging subsystem, wireshark)
   - Ressources to documentation
 - Forward ports to test server capabilities
+- Change meth netmask 192.0.2 to something else to avoid conflict with Zephyr tools
+  - Choose `192.0.7`
+
 
 - Steps:
   - Check TCP capabilities (client/server), including robustness
