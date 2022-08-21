@@ -4,7 +4,7 @@
 BOARD="mps2_an385"
 
 # Tell if disassembly files should be generated (could take additional time)
-DO_DISASSEMBLY=1
+DO_DISASSEMBLY=0
 
 all: cmake make
 

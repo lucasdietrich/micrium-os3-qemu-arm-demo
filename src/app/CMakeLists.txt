@@ -13,6 +13,9 @@ target_sources(${target} PRIVATE ${app_sources})
 target_sources_ifdef(CONFIG_NETWORKING ${target} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/app_net.c 
     ${CMAKE_CURRENT_LIST_DIR}/udp_client.c
+    ${CMAKE_CURRENT_LIST_DIR}/udp_server.c
+    ${CMAKE_CURRENT_LIST_DIR}/tcp_client.c
+    ${CMAKE_CURRENT_LIST_DIR}/tcp_server.c
 )
 
 target_include_directories(${target} PRIVATE .)
