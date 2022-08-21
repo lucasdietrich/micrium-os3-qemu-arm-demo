@@ -28,3 +28,6 @@
 [submodule "uC-DNSc"]
 	path = uC-DNSc
 	url = https://github.com/weston-embedded/uC-DNSc.git
+[submodule "uC-FS"]
+	path = uC-FS
+	url = https://github.com/weston-embedded/uC-FS.git

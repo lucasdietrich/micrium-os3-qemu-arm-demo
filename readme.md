@@ -17,15 +17,15 @@ The goal of this project is to build an Micrium OS III in order to run applicati
 Rationale for this is to be able to develop and test Micrium OS III applications with networking features without any hardware.
 
 **Roadmap**:
-- Create the CMakeLists.txt for different boards.
-- Link Micrium OS III and run it on QEMU
-- Link TCP/IP stack, integrate driver `smsc lan911x` for `mps2_an385`, debug
-- Check UDP capabilities (client)
-- Check TCP capabilities (client/server), including robustness
-- Implement TLS (client) communication using mbedTLS
-- Add a RAM FS
-- Implement and test a complete application (using networking/FS)
-- Add support for other boards/drivers (e.g. mps2_an385, netduinoplus2, stellaris)
+- **OK :** Create the CMakeLists.txt for different boards.
+- **OK :** Link Micrium OS III and run it on QEMU
+- **OK :** Link TCP/IP stack, integrate driver `smsc lan911x` for `mps2_an385`, debug
+- **OK :** Check UDP capabilities (client)
+- **NOK:** Check TCP capabilities (client/server), including robustness
+- **NOK:** Implement TLS (client) communication using mbedTLS
+- **OK :** Add a RAM FS
+- **NOK:** Implement and test a complete application (using networking/FS)
+- **NOK:** Add support for other boards/drivers (e.g. mps2_an385, netduinoplus2, stellaris)
 
 Also read board specific readme.md files:
 - [mps2_an385/readme.md](./src/boards/mps2_an385/readme.md)
@@ -81,7 +81,60 @@ meth: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 
 **Run**:
 - Once you have set up the network, you can run the application with command `make run`.
-  You should see log message in the console: `<inf app_net> App task starting`
+  You should see following output in the console (this is basically the code
+  executed in [src/app/app.c](./src/app/app.c)), which does:
+  1. Net interface init
+  2. UART init
+  3. OS Clock init
+  4. RAM FS init
+  5. DNS init
+  6. SNTP init and sync
+  7. Misc timer configuration
+  8. Loops querying an UDP server and printing time
+
+```
+<inf app_net> Clk_OS_Init err=100
+
+===================================================================
+=                        FS INITIALIZATION                        =
+===================================================================
+Initializing FS...
+    ===========================================================    
+    Adding/opening RAM disk volume "ram:0:"...
+    ...opened device.
+    ...opened device (not formatted).
+...init succeeded.
+===================================================================
+===================================================================
+
+<inf app_net> App_FS_Init -> 1
+<dbg app_net.fs_file_create_n_write> FSFile_Open file=0x200aa800 err=0
+<dbg app_net.fs_file_create_n_write> FSFile_Wr written=12 err=0
+<dbg app_net.fs_file_create_n_write> FSFile_Close err=0
+<dbg app_net.fs_file_read> FSFile_Open file=0x200aa800 err=0
+<dbg app_net.fs_file_read> FSFile_Rd read=12 err=0
+<dbg app_net.fs_file_read> FSFile_Close err=0
+<dbg app_net.fs_file_read> FS file ram:0:\test.txt read matches read = 1
+<inf app_net> DNSc_Init err=1
+<inf app_net> SNTPc_Init -> 1, err=0)
+<inf app_net> App_SNTPc_SetClk 0.fr.pool.ntp.org:123 -> 1
+<inf app_net> App task starting
+<inf app_net> Clk_GetTS -> 714428183 s
+<inf udp_client> NetSock_TxDataTo succeeded
+<inf udp_client> NetSock_RxDataFrom succeeded
+<inf app_net> Clk_GetTS -> 714428188 s
+<inf udp_client> NetSock_TxDataTo succeeded
+<inf udp_client> NetSock_RxDataFrom succeeded
+<inf app_net> Clk_GetTS -> 714428193 s
+<inf udp_client> NetSock_TxDataTo succeeded
+<inf udp_client> NetSock_RxDataFrom succeeded
+<inf app_net> Clk_GetTS -> 714428198 s
+<inf udp_client> NetSock_TxDataTo succeeded
+<inf udp_client> NetSock_RxDataFrom succeeded
+```
+
+Wireshark output:
+![](./pics/micrium_qemu_meth_wireshark.png)
 
 **Test**:
 - You should be able to ping your application with command `ping 192.0.2.3 -c 1`
@@ -105,6 +158,9 @@ Received 15 bytes from ('192.0.2.3', 56427)
 ```
 - In parallelel you can try to flood the application with `ping 192.0.2.3 -i 0.002`
 
+**Test TCP client**:
+- TODO
+
 **Debug**:
 - In order to debug your application, at the step `Run` instead of using command `make run`, run `make qemu` then press `F5` (if using VS Code)
 
@@ -116,8 +172,6 @@ In order to use wireshark to analyze the network traffic, use one of the followi
   `ssh lucas@fedora sudo tcpdump -U -s0 'not port 22' -i meth -w - | "C:\Program Files\Wireshark\Wireshark.exe" -k -i -`
 - If you have wireshark installed on your current Linux machine : 
   `ssh lucas@fedora sudo tcpdump -U -s0 'not port 22' -i meth -w - | wireshark -k -i -`
-
-![](./pics/micrium_qemu_meth_wireshark.png)
 
 **Note**:
 - To quit QEMU: `Ctrl + C` or `Ctrl + A then X` 
