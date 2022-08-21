@@ -62,7 +62,7 @@
 */
 
                                                                 /* Configure DNS Client feature  (see Note #1) :        */
-#define  NET_EXT_MODULE_CFG_DNS_EN                                 DEF_DISABLED
+#define  NET_EXT_MODULE_CFG_DNS_EN                                 DEF_ENABLED
                                                                 /*   DEF_DISABLED       DNS Client is DISABLED          */
                                                                 /*   DEF_ENABLED        DNS Client is  ENABLED          */
 

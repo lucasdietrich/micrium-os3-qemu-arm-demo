@@ -10,6 +10,12 @@
 #include <osal.h>
 #include <app_net.h>
 
+#include <Source/clk.h>
+#include <cfg/sntp-c_cfg.h>
+#include <Source/sntp-c.h>
+#include <cfg/dns-c_cfg.h>
+#include <Source/dns-c.h>
+
 #include <logging.h>
 LOG_MODULE_REGISTER(app_net, LOG_LEVEL_DBG);
 
@@ -17,6 +23,8 @@ LOG_MODULE_REGISTER(app_net, LOG_LEVEL_DBG);
 #if defined(CONFIG_NETWORKING)
 #define NETWORKING_UDP_CLIENT
 // #define NETWORKING_TCP_SERVER
+#define NETWORKING_SNTP_CLIENT
+#define NETWORKING_DNS_CLIENT
 #endif
 
 #if defined(serial_console) && defined(serial_log)
@@ -49,6 +57,23 @@ void app_init(void)
 	serial_init(serial_console);
 	serial_init(serial_log);
 
+#if defined(NETWORKING_DNS_CLIENT)
+	DNSc_ERR dnsc_err;
+	DNSc_Init(&DNSc_Cfg, NULL, &dnsc_err);
+	LOG_INF("DNSc_Init err=%u", dnsc_err);
+
+#endif /* NETWORKING_SNTP_CLIENT */
+
+#if defined(NETWORKING_SNTP_CLIENT)
+	CPU_BOOLEAN sntp;
+	SNTPc_ERR sntpc_err;
+	sntp = SNTPc_Init((SNTPc_CFG *)&SNTPc_Cfg, &sntpc_err);
+	LOG_INF("SNTPc_Init -> %d, err=%u)", sntp, sntpc_err);
+	sntp = App_SNTPc_SetClk(NULL);
+	LOG_INF("App_SNTPc_SetClk %s:%u -> %d", SNTPc_Cfg.ServerHostnamePtr,
+		SNTPc_Cfg.ServerPortNbr, sntp);
+#endif /* NETWORKING_SNTP_CLIENT */
+
 	timer_set_callback(&cmsdk_timer0, timer0_app_handler, NULL);
 	timer_start(&cmsdk_timer0, 25000000lu);
 
@@ -72,6 +97,9 @@ void app_task(void *p_arg)
 		}
 		
 		k_sleep(K_MSEC(100u));
+
+		CLK_TS_SEC ts = Clk_GetTS();
+		LOG_INF("Clk_GetTS -> %u s", ts);
 
 #if defined(NETWORKING_UDP_CLIENT)
 		App_UDP_Client("192.168.10.216");

@@ -1,0 +1,10 @@
+#ifndef _APP_CFG_H_
+#define _APP_CFG_H_
+
+#define CLK_OS_CFG_TASK_PRIO 13
+#define CLK_OS_CFG_TASK_STK_SIZE 512
+
+#define DNSc_OS_CFG_INSTANCE_TASK_PRIO 		13
+#define DNSc_OS_CFG_INSTANCE_TASK_STK_SIZE	512
+
+#endif /* _APP_CFG_H_ */

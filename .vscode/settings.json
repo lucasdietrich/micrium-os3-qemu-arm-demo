@@ -40,7 +40,11 @@
         "app_net.h": "c",
         "chrono": "c",
         "algorithm": "c",
-        "logging.h": "c"
+        "logging.h": "c",
+        "net_dev_lan911x.h": "c",
+        "app_cfg.h": "c",
+        "clk.h": "c",
+        "sntp-c_cfg.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true,
     "editor.rulers": [80]

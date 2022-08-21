@@ -9,7 +9,10 @@
 #include <stddef.h>
 
 #include <os.h>
+#include <osal.h>
 #include <lib_mem.h>
+
+#include <Source/clk.h>
 
 #include <board.h>
 
@@ -36,7 +39,7 @@ void sys_task(void *p_arg)
 	app_task(p_arg);
 
 	for (;;) {
-
+		/* We should never get here */
 	}
 }
 

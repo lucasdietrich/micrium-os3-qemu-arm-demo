@@ -19,3 +19,12 @@
 [submodule "CMSIS_5"]
 	path = CMSIS_5
 	url = https://github.com/ARM-software/CMSIS_5.git
+[submodule "uC-SNTPc"]
+	path = uC-SNTPc
+	url = https://github.com/weston-embedded/uC-SNTPc.git
+[submodule "uC-Clk"]
+	path = uC-Clk
+	url = https://github.com/weston-embedded/uC-Clk.git
+[submodule "uC-DNSc"]
+	path = uC-DNSc
+	url = https://github.com/weston-embedded/uC-DNSc.git

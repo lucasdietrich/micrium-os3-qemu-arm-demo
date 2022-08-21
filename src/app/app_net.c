@@ -16,6 +16,9 @@
 
 #include  <IP/IPv4/net_ipv4.h>
 
+#include <cfg/sntp-c_cfg.h>
+#include <Source/sntp-c.h>
+
 #include <net_dev_lan911x.h>
 
 #include <net_dev_cfg.h>
