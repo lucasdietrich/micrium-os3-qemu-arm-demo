@@ -27,3 +27,22 @@ make -C build run --no-print-directory
 ```
 
 File `build/io.txt` should have been created and should contain the 4 other UARTs data.
+
+## Notes:
+
+- Page 81 of RM0090 Rev 19:
+> After reset, the CPU clock frequency is 16 MHz and 0 wait state (WS) is configured in the FLASH_ACR register.
+
+
+## Micrium OS 3 demo for QEMU (Cortex M4)
+
+- [QEMU - STMicroelectronics STM32 boards](https://emu.readthedocs.io/en/latest/system/arm/stm32.html)
+  - https://github.com/qemu/qemu/blob/079b1252e9de384385c9da910262312ec2e574c8/include/hw/arm/stm32f405_soc.h
+- Target `netduinoplus2`
+- Microcontroller [STM32F405RGT6](https://www.st.com/en/microcontrollers-microprocessors/stm32f405rg.html#documentation) 
+  - Arm Cortex-M4 (Armv7E-M)
+  - 192 KB of SRAM
+
+- QEMU Machine implementation:
+  - https://github.com/qemu/qemu/blob/079b1252e9de384385c9da910262312ec2e574c8/hw/arm/netduinoplus2.c
+  - https://github.com/qemu/qemu/blob/aab8cfd4c3614a049b60333a3747aedffbd04150/hw/arm/stm32f405_soc.c

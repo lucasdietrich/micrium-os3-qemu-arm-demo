@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# Run this code as sudo
+# Do not run this script as root
 
 sudo iptables -t nat -A POSTROUTING -j MASQUERADE -s 192.0.2.3
 sudo sysctl -w net.ipv4.ip_forward=1
 
-../net-tools/loop-socat.sh &
-sudo ../net-tools/loop-slip-tap.sh
+sudo ./scripts/net-setup.sh
