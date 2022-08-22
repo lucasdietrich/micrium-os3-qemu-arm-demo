@@ -13,7 +13,7 @@ Currently, the following boards and features are planned (P), being implemented 
 **Note**:
 - For the moment partial Networking features are only supported on `mps2_an385` board. 
 
-The goal of this project is to build an Micrium OS III in order to run application using QEMU emulated boardq.
+The goal of this project is to build an Micrium OS III in order to run application using QEMU emulated board.
 Rationale for this is to be able to develop and test Micrium OS III applications with networking features without any hardware.
 
 **Roadmap**:
@@ -40,7 +40,7 @@ Also read board specific readme.md files:
 - Many others tools, please check the section *Tools and Versions* below
 
 **Get**:
-1. Clone the repository from [github.com/lucasdietrich/uc-os3-qemu-arm-demo](https://github.com/lucasdietrich/uc-os3-qemu-arm-demo), with submodules: `git clone https://github.com/lucasdietrich/uc-os3-qemu-arm-demo.git --recurse-submodules`. Repo size with submodules is about 1.9GB.
+1. Clone the repository from [github.com/lucasdietrich/uc-os3-qemu-arm-demo](https://github.com/lucasdietrich/uc-os3-qemu-arm-demo), with submodules: `git clone https://github.com/lucasdietrich/uc-os3-qemu-arm-demo.git --recurse-submodules`. Repo size with submodules is about 2GB.
 2. Open the project with Visual Studio Code (or your favorite IDE).
 
 **Build**:

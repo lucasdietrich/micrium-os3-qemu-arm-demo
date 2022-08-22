@@ -22,4 +22,7 @@ extern const struct device cmsdk_uart4;
 extern const struct device cmsdk_timer0;
 extern const struct device cmsdk_timer1;
 
+#define sys_timer0 (&cmsdk_timer0)
+#define sys_timer1 (&cmsdk_timer1)
+
 #endif /* _MPS2_AN385_BOARD_H_ */

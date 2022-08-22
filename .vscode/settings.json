@@ -46,7 +46,10 @@
         "clk.h": "c",
         "sntp-c_cfg.h": "c",
         "fs_app.h": "c",
-        "fs.h": "c"
+        "fs.h": "c",
+        "stdlib.h": "c",
+        "sntp-c.h": "c",
+        "app.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true,
     "editor.rulers": [80]

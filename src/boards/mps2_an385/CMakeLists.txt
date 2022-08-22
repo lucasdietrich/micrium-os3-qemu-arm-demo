@@ -1,18 +1,14 @@
 set(LINKER_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/MPS2.ld" PARENT_SCOPE)
 set(CPU "cortex-m3" PARENT_SCOPE)
-set(target "${PROJECT_NAME}.elf" PARENT_SCOPE)
 set(QEMU_MACHINE "mps2-an385" PARENT_SCOPE)
 set(ICOUNT_SHIFT 4 PARENT_SCOPE)
-set(QEMU_ADD_ARGS "${QEMU_ADD_ARGS} -nic tap,model=lan9118,script=no,downscript=no,ifname=meth" PARENT_SCOPE)
-
-set(CONFIG_NETWORKING 1 PARENT_SCOPE)
+set(QEMU_NET_TAP_MODEL_ARG "lan9118" PARENT_SCOPE)
 
 set(BOARD_DEFINES
 	"-DMPS2_AN385"
 	"-DCPU_CFG_NVIC_PRIO_BITS=3"
 	"-DARMCM3"
 	"-DFCPU=25000000ul"
-	"-DCONFIG_NETWORKING"
 )
 target_compile_definitions(${target} PRIVATE ${BOARD_DEFINES})
 
@@ -27,8 +23,6 @@ set(BOARD_SOURCES
 target_sources(${target} PRIVATE ${BOARD_SOURCES})
 
 set(C_BOARD_INCLUDES
-	# Cortex-M3 headers
-	# ${CMAKE_SOURCE_DIR}/CMSIS_5/Device/ARM/ARMCM3/Include
 	${CMAKE_SOURCE_DIR}/CMSIS_5/CMSIS/Core/Include
 
 	# Ethernet driver

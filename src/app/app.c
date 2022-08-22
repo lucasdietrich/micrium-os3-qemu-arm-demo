@@ -8,31 +8,34 @@
 
 #include <board.h>
 #include <osal.h>
-#include <app_net.h>
 
 #include <Source/clk.h>
-#include <cfg/sntp-c_cfg.h>
-#include <Source/sntp-c.h>
-#include <cfg/dns-c_cfg.h>
-#include <Source/dns-c.h>
-#include <fs/fs_app.h>
 
-#include <Source/fs.h>
-#include <Source/fs_file.h>
+#if defined(CONFIG_NETWORKING)
+#	include <app_net.h>
+#	include <cfg/sntp-c_cfg.h>
+#	include <Source/sntp-c.h>
+#	include <cfg/dns-c_cfg.h>
+#	include <Source/dns-c.h>
+
+#	define NETWORKING_UDP_CLIENT
+//	#define NETWORKING_TCP_SERVER
+#	define NETWORKING_SNTP_CLIENT
+#	define NETWORKING_DNS_CLIENT
+#	define CONFIG_OS_CLK
+#endif
+
+#if defined(CONFIG_FS)
+#	include <Source/fs.h>
+#	include <Source/fs_file.h>
+#	include <fs/fs_app.h>
+#endif
 
 #include <logging.h>
 LOG_MODULE_REGISTER(app_net, LOG_LEVEL_DBG);
 
 
-#if defined(CONFIG_NETWORKING)
-#define NETWORKING_UDP_CLIENT
-// #define NETWORKING_TCP_SERVER
-#define NETWORKING_SNTP_CLIENT
-#define NETWORKING_DNS_CLIENT
-#endif
-
 #if defined(serial_console) && defined(serial_log)
-
 int _write(int fd, char *buf, int count)
 {
 	for (; count != 0; --count) {
@@ -40,11 +43,16 @@ int _write(int fd, char *buf, int count)
 	}
 	return count;
 }
+#endif
 
+#if defined(sys_timer0)
 void timer0_app_handler(const struct device *dev, void *user_data)
 {
 	// serial_poll_out(serial_console, '!');
 }
+#endif
+
+#if defined(CONFIG_FS)
 
 CPU_CHAR *fs_path = "ram:0:\\test.txt";
 CPU_CHAR fs_wr_buf[0x100] = "Hello World\n";
@@ -103,6 +111,8 @@ static void fs_file_read()
 		(uint32_t)fs_rd_match);
 }
 
+#endif /* CONFIG_FS */
+
 #define TCP_SERVER_TASK_PRIORITY 10
 void tcpsrv(void *arg);
 OS_TCB  tcpsrv_thread;
@@ -118,16 +128,21 @@ void app_init(void)
 	serial_init(serial_console);
 	serial_init(serial_log);
 
+#if defined(CONFIG_OS_CLK)
 	/* TODO That's terrible, get rid of this savage task */
 	CLK_ERR err;
 	Clk_OS_Init(&err); 
 	LOG_INF("Clk_OS_Init err=%d", err);
+#endif /* CONFIG_OS_CLK */
+
+#if defined(CONFIG_FS)
 
 	CPU_BOOLEAN fs = App_FS_Init();
 	LOG_INF("App_FS_Init -> %d", fs);
 
 	fs_file_create_n_write();
 	fs_file_read();
+#endif /* CONFIG_FS */
 
 #if defined(NETWORKING_DNS_CLIENT)
 	DNSc_ERR dnsc_err;
@@ -146,8 +161,10 @@ void app_init(void)
 		SNTPc_Cfg.ServerPortNbr, sntp);
 #endif /* NETWORKING_SNTP_CLIENT */
 
-	timer_set_callback(&cmsdk_timer0, timer0_app_handler, NULL);
-	timer_start(&cmsdk_timer0, 25000000lu);
+#if defined(sys_timer0)
+	timer_set_callback(sys_timer0, timer0_app_handler, NULL);
+	timer_start(sys_timer0, 25000000lu);
+#endif /* sys_timer0 */
 
 #if defined(NETWORKING_TCP_SERVER)
 	OS_ERR uce;
@@ -170,8 +187,11 @@ void app_task(void *p_arg)
 		
 		k_sleep(K_MSEC(100u));
 
+#if defined(CONFIG_OS_CLK)
 		CLK_TS_SEC ts = Clk_GetTS();
 		LOG_INF("Clk_GetTS -> %u s", ts);
+#endif /* CONFIG_OS_CLK */
+
 
 #if defined(NETWORKING_UDP_CLIENT)
 		App_UDP_Client("192.168.10.216");
@@ -181,6 +201,7 @@ void app_task(void *p_arg)
 	}
 }
 
+#if defined(NETWORKING_TCP_SERVER)
 void tcpsrv(void *arg)
 {
 	ARG_UNUSED(arg);
@@ -189,4 +210,4 @@ void tcpsrv(void *arg)
 		App_TCP_ServerIPv4();
 	}
 }
-#endif
+#endif /* NETWORKING_TCP_SERVER */

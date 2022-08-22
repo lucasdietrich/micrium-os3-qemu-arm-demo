@@ -46,14 +46,19 @@ set(ELF_PATH "${CMAKE_BINARY_DIR}/${target}")
 set(target "${PROJECT_NAME}.elf")
 
 set(ICOUNT_SHIFT 0)
-set(QEMU_ADD_ARGS "")
+set(QEMU_NET_TAP_MODEL_ARG "")
 
+################################################################################
+# Create EXE
 add_executable(${target})
 
 if (NOT DEFINED BOARD)
 	message(STATUS "Board not defined, selecting default board 'netduinoplus2'")
-	set(BOARD "netduinoplus2")
+	set(BOARD "mps2_an385")
 endif()
+
+################################################################################
+# Include board CMakeLists.txt and general CMakeLists.txt
 
 message(STATUS "Board: ${BOARD}")
 if (BOARD STREQUAL "netduinoplus2")
@@ -66,28 +71,35 @@ else()
 	message(FATAL_ERROR "Unknown board '${BOARD}'")
 endif()
 
-# add_subdirectory(src/boards/${BOARD})
-
 add_subdirectory(src/app)
 add_subdirectory(src/device)
-add_subdirectory(src/middlewares)
+add_subdirectory(src/subsys)
+
+################################################################################
+# OS source and includes
 
 set(C_SOURCES
     src/os/os_app_hooks.c
 	src/entry.c
 )
 
-set(UCOS3_ARCH_SOURCES
+set(OS_ARCH_SOURCES
 	${CMAKE_SOURCE_DIR}/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/GNU/os_cpu_a.S
 	${CMAKE_SOURCE_DIR}/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/os_cpu_c.c
+)
 
+set(OS_CPU_ARCH_SOURCES
 	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/GNU/cpu_a.s
 	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/cpu_c.c
 )
 
-set(UCOS3_SOURCES_KAL "uC-Common/KAL/uCOS-III/kal.c")
+set(OS_CPU_CORE_SOURCES
+	${CMAKE_SOURCE_DIR}/uC-CPU/cpu_core.c
+)
 
-set(UCOS3_KERNEL_SOURCES
+set(OS_KAL_SOURCES "uC-Common/KAL/uCOS-III/kal.c")
+
+set(OS_KERNEL_SOURCES
 	# uC-OS3/Source/__dbg_uCOS-III.c
 
 	uC-OS3/Source/os_cfg_app.c
@@ -106,48 +118,82 @@ set(UCOS3_KERNEL_SOURCES
 	uC-OS3/Source/os_time.c
 	uC-OS3/Source/os_tmr.c
 	uC-OS3/Source/os_var.c
-
-	uC-CPU/cpu_core.c
 )
 
-file(GLOB UCOS3_SOURCES_TCPIP_BASE uC-TCP-IP/Source/*.c)
-file(GLOB UCOS3_SOURCES_TCPIP_IPV4 uC-TCP-IP/IP/IPv4/*.c)
-file(GLOB UCOS3_SOURCES_TCPIP_IPV6 uC-TCP-IP/IP/IPv6/*.c)
-file(GLOB UCOS3_SOURCES_TCPIP_IF uC-TCP-IP/IF/*.c)
-file (GLOB UCOS3_SOURCE_SNTPC uC-SNTPc/Source/*.c)
-file (GLOB UCOS3_SOURCE_DNSC uC-DNSc/Source/*.c)
-set(UCOS3_SOURCES_TCPIP ${UCOS3_SOURCES_TCPIP_BASE} ${UCOS3_SOURCES_TCPIP_IPV4} ${UCOS3_SOURCES_TCPIP_IPV6} ${UCOS3_SOURCES_TCPIP_IF} ${UCOS3_SOURCE_SNTPC} ${UCOS3_SOURCE_DNSC})
+# TCP/IP stack
+if (DEFINED CONFIG_NETWORKING AND CONFIG_NETWORKING STREQUAL 1)
+	file(GLOB OS_TCPIP_CORE_SOURCES uC-TCP-IP/Source/*.c)
+	file(GLOB OS_TCPIP_IPV4_SOURCES uC-TCP-IP/IP/IPv4/*.c)
+	file(GLOB OS_TCPIP_IPV6_SOURCES uC-TCP-IP/IP/IPv6/*.c)
+	file(GLOB OS_TCPIP_IF_SOURCES 	uC-TCP-IP/IF/*.c)
+	file(GLOB OS_SNTPC_SOURCES 		uC-SNTPc/Source/*.c)
+	file(GLOB OS_DNSC_SOURCES 		uC-DNSc/Source/*.c)
+	set(OS_TCPIP_SOURCES 
+		${OS_TCPIP_CORE_SOURCES} 
+		${OS_TCPIP_IPV4_SOURCES} 
+		${OS_TCPIP_IPV6_SOURCES} 
+		${OS_TCPIP_IF_SOURCES} 
+		${OS_SNTPC_SOURCES} 
+		${OS_DNSC_SOURCES}
+	)
+	set(OS_TCPIP_INCLUDES
+		uC-TCP-IP
+		uC-SNTPc
+		uC-DNSc
+	)
+	target_compile_definitions(${target} PRIVATE -DCONFIG_NETWORKING)
+endif()
 
-file (GLOB UCOS3_SOURCE_FS_GENERIC uC-FS/Source/*.c)
-file (GLOB UCOS3_SOURCE_FS_FAT_GENERIC uC-FS/FAT/*.c)
-set(UCOS3_SOURCES_RAM_OS uC-FS/OS/uCOS-III/fs_os.c)
-set(UCOS3_SOURCES_RAM_FS uC-FS/Dev/RAMDisk/fs_dev_ramdisk.c)
+# FS
+if (DEFINED CONFIG_FS AND CONFIG_FS STREQUAL 1)
+	file (GLOB OS_FS_SOURCES uC-FS/Source/*.c)
+	file (GLOB OS_FS_FAT_SOURCES uC-FS/FAT/*.c)
+	set(OS_FS_OS_SOURCES uC-FS/OS/uCOS-III/fs_os.c)
+	set(OS_FS_RAMDISK_SOURCES uC-FS/Dev/RAMDisk/fs_dev_ramdisk.c)
+	set(OS_FS_SOURCES
+		${OS_FS_SOURCES} 
+		${OS_FS_FAT_SOURCES} 
+		${OS_FS_OS_SOURCES} 
+		${OS_TCPIP_IF_SOURCES} 
+		${OS_FS_RAMDISK_SOURCES}
+	)
+	set(OS_FS_INCLUDES
+		uC-FS
+		uC-FS/OS/uCOS-III
+		uC-FS/Dev/RAMDisk
+	)
+	target_compile_definitions(${target} PRIVATE -DCONFIG_FS)
+endif()
 
-set(UCOS3_CLK uC-Clk/OS/uCOS-III/clk_os.c uC-Clk/Source/clk.c)
+set(OS_CLK_SOURCES uC-Clk/OS/uCOS-III/clk_os.c uC-Clk/Source/clk.c)
 
-file(GLOB UCOS3_LIB_SOURCES uC-LIB/*.c)
+file(GLOB OS_LIB_SOURCES uC-LIB/*.c)
 
-set(C_UCOS3_INCLUDES
+target_sources(${target} PRIVATE 
+	${C_SOURCES} 
+	${OS_ARCH_SOURCES} 
+	${OS_CPU_ARCH_SOURCES}
+	${OS_CPU_CORE_SOURCES}
+	${OS_KAL_SOURCES} 
+	${OS_KERNEL_SOURCES} 
+	${OS_TCPIP_SOURCES} 
+	${OS_FS_SOURCES}
+	${OS_CLK_SOURCES}
+	${OS_LIB_SOURCES}
+)
+
+set(OS_INCLUDES
     uC-OS3/Source
 	uC-OS3
 
 	uC-CPU
 	uC-LIB
-	uC-TCP-IP
 	uC-Common
-	uC-SNTPc
 	uC-Clk
-	uC-DNSc
 
-	uC-FS
-	uC-FS/OS/uCOS-III
-	uC-FS/Dev/RAMDisk
-
-    ${CMAKE_SOURCE_DIR}/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/GNU
-	${CMAKE_SOURCE_DIR}/uC-CPU/ARM-Cortex-M/ARMv7-M/GNU
+    uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/GNU
+	uC-CPU/ARM-Cortex-M/ARMv7-M/GNU
 )
-
-target_sources(${target} PRIVATE ${C_SOURCES} ${UCOS3_KERNEL_SOURCES} ${UCOS3_LIB_SOURCES} ${UCOS3_SOURCES_TCPIP} ${UCOS3_SOURCES_KAL} ${UCOS3_ARCH_SOURCES} ${UCOS3_CLK} ${UCOS3_SOURCE_FS_GENERIC} ${UCOS3_SOURCES_RAM_OS} ${UCOS3_SOURCES_RAM_FS} ${UCOS3_SOURCE_FS_FAT_GENERIC})
 
 set(C_INCLUDES
 	# Application os configuration
@@ -159,7 +205,12 @@ set(C_INCLUDES
 	# Application headers
     src
 )
-target_include_directories(${target} PRIVATE ${C_INCLUDES} ${C_UCOS3_INCLUDES})
+target_include_directories(${target} PRIVATE 
+	${C_INCLUDES}
+	${OS_INCLUDES}
+	${OS_TCPIP_INCLUDES}
+	${OS_FS_INCLUDES}
+)
 
 message(STATUS "Compiling ${target} CPU=${CPU}")
 
@@ -197,8 +248,6 @@ target_link_options(${target} PRIVATE
 	-Wl,--print-memory-usage
 )
 
-
-
 # Print size of executable
 add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${SZ} -G -d ${target} > ${PROJECT_NAME}.size.txt
@@ -222,16 +271,27 @@ if(DEFINED DO_DISASSEMBLY AND DO_DISASSEMBLY STREQUAL 1)
 	)
 endif()
 
-separate_arguments(QEMU_ADD_ARGS)
+# If CONFIG_NETWORKING is set, define QEMU_NET_ARGS
+if(DEFINED CONFIG_NETWORKING AND CONFIG_NETWORKING STREQUAL 1)
+	if (QEMU_NET_TAP_MODEL_ARG STREQUAL "")
+		message(FATAL_ERROR "QEMU_NET_TAP_MODEL_ARG is not set")
+	endif()
+	set(QEMU_NET_ARGS "-nic tap,model=${QEMU_NET_TAP_MODEL_ARG},script=no,downscript=no,ifname=meth")
+else()
+	set(QEMU_NET_ARGS "")
+endif()
+
+# Tips
+separate_arguments(QEMU_NET_ARGS)
 
 # generate custom target to debug in qemu
 add_custom_target(qemu
-	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -nodefaults -nographic -semihosting -icount shift=${ICOUNT_SHIFT},align=off,sleep=on -rtc clock=vm -vga none -nographic -device loader,file=${target} -pidfile qemu.pid -chardev stdio,id=myCon -serial chardev:myCon -chardev file,id=myFile,mux=on,path=io.txt -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile ${QEMU_ADD_ARGS} -s -S
+	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -nodefaults -nographic -semihosting -icount shift=${ICOUNT_SHIFT},align=off,sleep=on -rtc clock=vm -vga none -nographic -device loader,file=${target} -pidfile qemu.pid -chardev stdio,id=myCon -serial chardev:myCon -chardev file,id=myFile,mux=on,path=io.txt -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile ${QEMU_NET_ARGS} -s -S
 )
 
 # generate custom command to run only in qemu
 add_custom_target(run
-	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -nodefaults -nographic -semihosting -icount shift=${ICOUNT_SHIFT},align=off,sleep=on -rtc clock=vm -vga none -nographic -device loader,file=${target} -pidfile qemu.pid -chardev stdio,id=myCon -serial chardev:myCon -chardev file,id=myFile,mux=on,path=io.txt -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile ${QEMU_ADD_ARGS}
+	COMMAND qemu-system-arm -cpu ${CPU} -machine ${QEMU_MACHINE} -nodefaults -nographic -semihosting -icount shift=${ICOUNT_SHIFT},align=off,sleep=on -rtc clock=vm -vga none -nographic -device loader,file=${target} -pidfile qemu.pid -chardev stdio,id=myCon -serial chardev:myCon -chardev file,id=myFile,mux=on,path=io.txt -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile -serial chardev:myFile ${QEMU_NET_ARGS}
 )
 
 # Show help for debug:

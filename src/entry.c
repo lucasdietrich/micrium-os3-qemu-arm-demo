@@ -17,7 +17,6 @@
 #include <board.h>
 
 #include <app.h>
-#include <app_net.h>
 
 #define OS_TICKS_PER_SEC OS_CFG_TICK_RATE_HZ
 

@@ -1,4 +1,9 @@
-file(GLOB BOARD_CONFIG_SOURCES *.c)
-target_sources(${target} PRIVATE ${BOARD_CONFIG_SOURCES})
+
+target_sources_ifdef(CONFIG_NETWORKING ${target} PRIVATE 
+    ${CMAKE_CURRENT_LIST_DIR}/src/boards/lm3s6965evb/cfg/dns-c_cfg.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/boards/lm3s6965evb/cfg/net_cfg.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/boards/lm3s6965evb/cfg/net_dev_cfg.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/boards/lm3s6965evb/cfg/sntp-c_cfg.c
+)
 
 target_include_directories(${target} PRIVATE .)
