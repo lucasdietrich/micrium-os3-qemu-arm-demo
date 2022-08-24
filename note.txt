@@ -1,0 +1,7 @@
+All the current code is public, under Apache License 2.0.
+
+I entirely worked on this project on my spare time with my own computer and for 
+personnal use. Using only publicly accessible resources (datasheets, code, 
+examples, ...).
+
+As my VM is misconfigured, time of the commits does not match the real time.
