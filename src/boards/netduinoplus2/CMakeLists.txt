@@ -1,3 +1,9 @@
+## 
+## Copyright (c) 2022 Lucas Dietrich <ld.adecy@gmail.com>
+## 
+## SPDX-License-Identifier: Apache-2.0
+## 
+
 set(LINKER_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/STM32F405RGTx_FLASH.ld" PARENT_SCOPE)
 set(CPU "cortex-m4" PARENT_SCOPE)
 set(QEMU_MACHINE "netduinoplus2" PARENT_SCOPE)

@@ -5,3 +5,8 @@ personnal use. Using only publicly accessible resources (datasheets, code,
 examples, ...).
 
 As my VM is misconfigured, time of the commits does not match the real time.
+
+Credits
+- Zephyr RTOS: https://zephyrproject.org
+- QEMU: http://qemu.org
+- Johannes Bruder (cmake ARM embedded toolchain)

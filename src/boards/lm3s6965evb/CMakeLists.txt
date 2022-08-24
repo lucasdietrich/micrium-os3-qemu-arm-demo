@@ -1,3 +1,9 @@
+## 
+## Copyright (c) 2022 Lucas Dietrich <ld.adecy@gmail.com>
+## 
+## SPDX-License-Identifier: Apache-2.0
+## 
+
 set(LINKER_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/gcc_arm.ld" PARENT_SCOPE)
 set(CPU "cortex-m3" PARENT_SCOPE)
 set(QEMU_MACHINE "lm3s6965evb" PARENT_SCOPE)

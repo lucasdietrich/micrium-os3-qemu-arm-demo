@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2022 Lucas Dietrich <ld.adecy@gmail.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include <app.h>
 
 #include <stdint.h>
@@ -167,6 +173,8 @@ void app_init(void)
 #endif /* sys_timer0 */
 
 #if defined(NETWORKING_TCP_SERVER)
+	/* Let's define a new thread with a simple function having 13 
+	 * meaningful arguments returning void because it cannot fails */
 	OS_ERR uce;
 	OSTaskCreate(&tcpsrv_thread, "sys_main", tcpsrv, (void *)0, TCP_SERVER_TASK_PRIORITY,
 		     &tcpsrv_stack[0], 10, sizeof(tcpsrv_stack) / 4u, 5, 10,
