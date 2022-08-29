@@ -40,7 +40,7 @@ Also read board specific readme.md files:
 - Many others tools, please check the section *Tools and Versions* below
 
 **Get**:
-1. Clone the repository from [github.com/lucasdietrich/micrium-os3-qemu-arm-demo](https://github.com/lucasdietrich/micrium-os3-qemu-arm-demo), with submodules: `git clone https://github.com/lucasdietrich/uc-os3-qemu-arm-demo.git --recurse-submodules`. Repo size with submodules is about 2GB.
+1. Clone the repository from [github.com/lucasdietrich/micrium-os3-qemu-arm-demo](https://github.com/lucasdietrich/micrium-os3-qemu-arm-demo), with submodules: `git clone https://github.com/lucasdietrich/micrium-os3-qemu-arm-demo.git --recurse-submodules`. Repo size with submodules is about 2GB.
 2. Open the project with Visual Studio Code (or your favorite IDE).
 
 **Build**:
