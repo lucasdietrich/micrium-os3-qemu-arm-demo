@@ -2,7 +2,46 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "QEMU ARM",
+            "name": "GDB QEMU lm3s6965evb",
+            "cwd": "${workspaceRoot}",
+            "executable": "build/ucos3-qemu-app.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "external",
+            "gdbTarget": "127.0.0.1:1234",
+            "runToEntryPoint": "main",
+            "svdFile": "ARMCM3.svd"
+        },
+        {
+            "name": "GDB QEMU mps2-an385",
+            "cwd": "${workspaceRoot}",
+            "executable": "build/ucos3-qemu-app.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "external",
+            "gdbTarget": "127.0.0.1:1234",
+            "runToEntryPoint": "main",
+            "svdFile": "CMSDK_CM3.svd"
+        },
+        {
+            /* TODO Launch QEMU by itself 
+             * autogenerate args configuration */
+            "name": "Launch QEMU ARM lm3s6965evb",
+            "cwd": "${workspaceRoot}",
+            "executable": "build/ucos3-qemu-app.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "qemu",
+            "serverArgs": [
+                // "-v"
+            ],
+            "cpu": "cortex-m3",
+            "machine": "lm3s6965evb",
+            "runToEntryPoint": "main",
+        },
+        {
+            /* Deprecated */
+            "name": "QEMU ARM Agnostic",
             "type": "cppdbg",
             "request": "launch",
             "miDebuggerServerAddress": "127.0.0.1:1234",
@@ -17,6 +56,6 @@
                 "engineLogging": false
             },
             "MIMode": "gdb",
-        }
+        },
     ]
 }

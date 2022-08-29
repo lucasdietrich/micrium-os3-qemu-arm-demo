@@ -21,12 +21,17 @@ target_compile_definitions(${target} PRIVATE ${BOARD_DEFINES})
 set(BOARD_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/sys/startup_MPS2.S
 	${CMAKE_CURRENT_LIST_DIR}/sys/system_CMSDK_CM3.c
-
-	# Ethernet driver
-	${CMAKE_SOURCE_DIR}/uC-TCP-IP/Dev/Ether/LAN911x/net_dev_lan911x.c
-	${CMAKE_SOURCE_DIR}/uC-TCP-IP/Dev/Ether/PHY/Generic/net_phy.c
 )
 target_sources(${target} PRIVATE ${BOARD_SOURCES})
+
+if (DEFINED CONFIG_NETWORKING AND CONFIG_NETWORKING STREQUAL 1)
+	set(BOARD_NET_SOURCES
+		# Ethernet driver
+		${CMAKE_SOURCE_DIR}/uC-TCP-IP/Dev/Ether/LAN911x/net_dev_lan911x.c
+		${CMAKE_SOURCE_DIR}/uC-TCP-IP/Dev/Ether/PHY/Generic/net_phy.c
+	)
+	target_sources(${target} PRIVATE ${BOARD_NET_SOURCES})
+endif()
 
 set(C_BOARD_INCLUDES
 	${CMAKE_SOURCE_DIR}/CMSIS_5/CMSIS/Core/Include

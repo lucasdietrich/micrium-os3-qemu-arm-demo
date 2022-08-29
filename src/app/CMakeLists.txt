@@ -11,4 +11,4 @@ target_sources(${target} PRIVATE ${app_sources})
 target_include_directories(${target} PRIVATE .)
 
 add_subdirectory_ifdef(CONFIG_FS ${CMAKE_CURRENT_LIST_DIR}/fs)
-add_subdirectory_ifdef(CONFIG_FS ${CMAKE_CURRENT_LIST_DIR}/net)
+add_subdirectory_ifdef(CONFIG_NETWORKING ${CMAKE_CURRENT_LIST_DIR}/net)

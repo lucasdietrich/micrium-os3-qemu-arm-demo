@@ -156,12 +156,13 @@ Received 15 bytes from ('192.0.2.3', 56427)
 <inf udp_client> NetSock_RxDataFrom succeeded
 ...
 ```
-- In parallelel you can try to flood the application with `ping 192.0.2.3 -i 0.002`
+- In parralel you can try to flood the application with `ping 192.0.2.3 -i 0.002`
 
 **Test TCP client**:
 - TODO
 
 **Debug**:
+- You will need *cortex-debug* (`marus25.cortex-debug`) extension for VS Code: 
 - In order to debug your application, at the step `Run` instead of using command `make run`, run `make qemu` then press `F5` (if using VS Code)
 
 ![](./pics/micrium_qemu_lan911x_debug.png)
@@ -247,6 +248,13 @@ const  NET_TASK_CFG  NetRxTaskCfg = {
     - MPU: https://github.com/pokitoz/qemu-lm3s6965evb/blob/master/main.c
 - https://github.com/Introduction-To-System-On-Chip/QEMU_lm3s6965evb
 - https://github.com/moslevin/mark3-bsp-qemu_lm3s6965evb
+
+### Others
+- SVD files:
+  - https://github.com/posborne/cmsis-svd/blob/master/data/ARM_SAMPLE/CMSDK_CM3.svd
+  - https://forum.segger.com/index.php/Thread/4147-Cortex-M3-Peripherals-SVD-File/
+- Cortex-debug: https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
+- https://stackoverflow.com/questions/11408041/how-to-debug-the-linux-kernel-with-gdb-and-qemu/33203642#33203642
 
 ## Tools and versions
 

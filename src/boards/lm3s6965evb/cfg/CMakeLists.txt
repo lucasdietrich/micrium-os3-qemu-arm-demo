@@ -4,12 +4,14 @@
 ## SPDX-License-Identifier: Apache-2.0
 ## 
 
-
-target_sources_ifdef(CONFIG_NETWORKING ${target} PRIVATE 
-    ${CMAKE_CURRENT_LIST_DIR}/src/boards/lm3s6965evb/cfg/dns-c_cfg.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/boards/lm3s6965evb/cfg/net_cfg.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/boards/lm3s6965evb/cfg/net_dev_cfg.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/boards/lm3s6965evb/cfg/sntp-c_cfg.c
-)
+if (DEFINED CONFIG_NETWORKING AND CONFIG_NETWORKING STREQUAL 1)
+	set(BOARD_NET_CFG_SOURCES 
+		${CMAKE_CURRENT_LIST_DIR}/dns-c_cfg.c
+        ${CMAKE_CURRENT_LIST_DIR}/net_cfg.c
+        ${CMAKE_CURRENT_LIST_DIR}/net_dev_cfg.c
+        ${CMAKE_CURRENT_LIST_DIR}/sntp-c_cfg.c
+	)
+    target_sources(${target} PRIVATE ${BOARD_NET_CFG_SOURCES})
+endif()
 
 target_include_directories(${target} PRIVATE .)

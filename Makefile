@@ -12,6 +12,10 @@ BOARD="mps2_an385"
 # Tell if disassembly files should be generated (could take additional time)
 DO_DISASSEMBLY=0
 
+# Application configuration
+CONFIG_NETWORKING=1
+CONFIG_FS=1
+
 all: cmake make
 
 cmake:
@@ -19,8 +23,8 @@ cmake:
 		-DBOARD=$(BOARD) -S . -B build \
 		-DCMAKE_BUILD_TYPE=Debug \
 		-DDO_DISASSEMBLY=$(DO_DISASSEMBLY) \
-		-DCONFIG_NETWORKING=1 \
-		-DCONFIG_FS=1
+		-DCONFIG_NETWORKING=$(CONFIG_NETWORKING) \
+		-DCONFIG_FS=$(CONFIG_FS)
 
 cmake_lm3s6965evb:
 	cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain-arm-none-eabi.cmake \
