@@ -45,7 +45,7 @@ Also read board specific readme.md files:
 
 **Build**:
 - In order to build for `mps2_an385` target: 
-  `cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain-arm-none-eabi.cmake -DCMAKE_BUILD_TYPE=Debug -DDO_DISASSEMBLY=1 -DBOARD=mps2_an385 -S . -B build`
+  `cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain-arm-none-eabi.cmake -DCMAKE_BUILD_TYPE=Debug -DDO_DISASSEMBLY=1 -DBOARD=mps2_an385 -DCONFIG_NETWORKING=1 -DCONFIG_FS=1 -S . -B build`
   - The `DO_DISASSEMBLY` option is used to enable disassembly of the binary. Disable it if you don't need it.
 - Make `make -C build`
 - If build succeeds, you should get something like this:
