@@ -7,7 +7,7 @@ Currently, the following boards and features are planned (P), being implemented 
 | Status | Board (QEMU / cpu)        | Arch            | Manufacturer | Ethernet driver | Current state                 |
 | ------ | ------------------------- | --------------- | ------------ | --------------- | ----------------------------- |
 | I      | mps2_an385                | ARMv7 Cortex M3 |              | smsc911x        | Ethernet, UART, timer drivers |
-| P      | netduinoplus2 - stm32f405 | ARMv7 Cortex M4 |              | -               | -                             |
+| P      | netduinoplus2 - stm32f405 | ARMv7 Cortex M4 |              | -               | UART driver                   |
 | P      | Stellaris - lm3s6965evb   | ARMv7 Cortex M3 | TI           | stellaris       | UART driver                   |
 
 **Note**:
