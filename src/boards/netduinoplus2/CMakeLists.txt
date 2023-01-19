@@ -17,15 +17,9 @@ set(BOARD_DEFINES
 )
 target_compile_definitions(${target} PRIVATE ${BOARD_DEFINES})
 
-file(GLOB BOARD_CFG_SOURCES ${CMAKE_CURRENT_LIST_DIR}/cfg/*.c)
-target_sources(${target} PRIVATE ${BOARD_CFG_SOURCES})
-
 set(BOARD_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/sys/startup_stm32f405xx.s
 	${CMAKE_CURRENT_LIST_DIR}/sys/system_stm32f4xx.c
-
-	${CMAKE_CURRENT_LIST_DIR}/cfg/net_cfg.c
-	${CMAKE_CURRENT_LIST_DIR}/cfg/net_dev_cfg.c
 )
 target_sources(${target} PRIVATE ${BOARD_SOURCES})
 
@@ -146,3 +140,4 @@ set(C_BOARD_INCLUDES
 target_include_directories(${target} PRIVATE ${C_BOARD_INCLUDES})
 
 add_subdirectory(drv)
+add_subdirectory(cfg)

@@ -10,7 +10,7 @@
             "servertype": "external",
             "gdbTarget": "127.0.0.1:1234",
             "runToEntryPoint": "main",
-            "svdFile": "ARMCM3.svd"
+            "svdFile": "res/svd/ARMCM3.svd"
         },
         {
             "name": "GDB QEMU mps2-an385",
@@ -21,7 +21,18 @@
             "servertype": "external",
             "gdbTarget": "127.0.0.1:1234",
             "runToEntryPoint": "main",
-            "svdFile": "CMSDK_CM3.svd"
+            "svdFile": "res/svd/CMSDK_CM3.svd"
+        },
+        {
+            "name": "GDB QEMU netduinoplus2",
+            "cwd": "${workspaceRoot}",
+            "executable": "build/ucos3-qemu-app.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "external",
+            "gdbTarget": "127.0.0.1:1234",
+            "runToEntryPoint": "main",
+            "svdFile": "res/svd/STM32F405.svd"
         },
         {
             /* TODO Launch QEMU by itself 

@@ -49,7 +49,9 @@
         "fs.h": "c",
         "stdlib.h": "c",
         "sntp-c.h": "c",
-        "app.h": "c"
+        "app.h": "c",
+        "errno.h": "c",
+        "common.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true,
     "editor.rulers": [80]

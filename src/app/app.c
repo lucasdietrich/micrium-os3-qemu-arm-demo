@@ -14,6 +14,7 @@
 
 #include <board.h>
 #include <osal.h>
+#include <device.h>
 
 #include <Source/clk.h>
 

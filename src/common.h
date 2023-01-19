@@ -26,10 +26,21 @@
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
 #define CONTAINER_OF(ptr, type, field) ((type *)(((char *)(ptr)) - offsetof(type, field)))
 
+#ifndef BIT
 #define BIT(b) (1 << (b))
+#endif
+
+#ifndef SET_BIT
 #define SET_BIT(x, b)  ((x) |= (b))
+#endif
+
+#ifndef CLR_BIT
 #define CLR_BIT(x, b)  ((x) &= (~(b)))
+#endif
+
+#ifndef TEST_BIT
 #define TEST_BIT(x, b) ((bool) ((x) & b))
+#endif
 
 #define ARG_UNUSED(arg) ((void) (arg))
 
