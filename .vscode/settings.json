@@ -51,8 +51,13 @@
         "sntp-c.h": "c",
         "app.h": "c",
         "errno.h": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "stm32f4xx_ll_cortex.h": "c",
+        "stm32f4xx_hal_cortex.h": "c"
     },
     "bookmarks.saveBookmarksInProject": true,
-    "editor.rulers": [80]
+    "editor.rulers": [
+        80
+    ],
+    "cortex-debug.variableUseNaturalFormat": false
 }

@@ -13,4 +13,6 @@ extern const struct device stm32_usart6;
 #define serial_console (&stm32_usart1)
 #define serial_log (&stm32_usart2)
 
+int stm32_mpu_init(void *addr);
+
 #endif /* _NETDUINOPLUS2_BOARD_H_ */

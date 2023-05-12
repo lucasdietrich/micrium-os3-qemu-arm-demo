@@ -5,16 +5,16 @@
 ## 
 
 # Choose the target to build
-# BOARD="netduinoplus2"
+BOARD="netduinoplus2"
 # BOARD="lm3s6965evb"
-BOARD="mps2_an385"
+# BOARD="mps2_an385"
 
 # Tell if disassembly files should be generated (could take additional time)
-DO_DISASSEMBLY=0
+DO_DISASSEMBLY=1
 
 # Application configuration
-CONFIG_NETWORKING=1
-CONFIG_FS=1
+CONFIG_NETWORKING=0
+CONFIG_FS=0
 
 all: cmake make
 
